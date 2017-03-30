@@ -11,6 +11,9 @@ import android.widget.TextView;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 
+import org.w3c.dom.Node;
+
+import java.security.acl.Group;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,11 +23,13 @@ public class main extends AppCompatActivity {
     private TextView startLabel;
     private ImageView box;
     private ImageView player;
+    private ImageView platform;
+    private ImageView platform2;
 
-    boolean jump = false;
-    float jumpPowerDefault = 25.0f;
+    boolean jump = false; // True kun pelaaja hyppää
+    float jumpPowerDefault = 30.0f; // Kuinka monta pikseliä pelaaja hyppää per frame (alussa)
     float jumpPower = jumpPowerDefault;
-    float obstacleSpeedDefault = 12.5f;
+    float obstacleSpeedDefault = 20.0f; // Esteiden nopeus
     float obstacleSpeed = obstacleSpeedDefault;
     int action;
 
@@ -43,6 +48,12 @@ public class main extends AppCompatActivity {
         startLabel = (TextView) findViewById(R.id.startLabel);
         box = (ImageView) findViewById(R.id.box);
         player = (ImageView) findViewById(R.id.player);
+        platform = (ImageView) findViewById(R.id.platform);
+        platform2 = (ImageView) findViewById(R.id.platform);
+
+        platform.setY(860);
+
+
 
         startLabel.setVisibility(View.INVISIBLE);
 
@@ -65,9 +76,8 @@ public class main extends AppCompatActivity {
         jumpPower -= 1.0f;
         if (jumpPower < 0) jumpPower -= 0.20f;
         player.setY(playerY);
-        if (playerY > 760.0f) {
-            playerY = 760.0f;
-            player.setY(playerY);
+        if (playerY + 5 > platform.getY()-platform.getHeight() && playerY + 5 < platform.getY()){
+            player.setY(platform.getY()-platform.getHeight());
             if (action == MotionEvent.ACTION_UP) jump = false;
             jumpPower = jumpPowerDefault;
         }
