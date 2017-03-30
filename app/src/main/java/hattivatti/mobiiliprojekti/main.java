@@ -1,11 +1,15 @@
 package hattivatti.mobiiliprojekti;
 
+import android.app.Activity;
+import android.graphics.Canvas;
 import android.os.Debug;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v4.view.GestureDetectorCompat;
@@ -17,7 +21,7 @@ import java.security.acl.Group;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class main extends AppCompatActivity {
+public class main extends Activity {
 
     private TextView scoreLabel;
     private TextView startLabel;
@@ -43,9 +47,16 @@ public class main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        scoreLabel = (TextView) findViewById(R.id.scoreLabel);
+        //piilota yläpalkki
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        //peli koko näytölle
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        
+        setContentView(new GamePanel(this));
+
+        /*scoreLabel = (TextView) findViewById(R.id.scoreLabel);
         startLabel = (TextView) findViewById(R.id.startLabel);
         box = (ImageView) findViewById(R.id.box);
         player = (ImageView) findViewById(R.id.player);
@@ -55,7 +66,6 @@ public class main extends AppCompatActivity {
         platform.setY(860);
         platform2.setY(500);
         platform2.setX(1920);
-
 
 
         startLabel.setVisibility(View.INVISIBLE);
@@ -72,10 +82,10 @@ public class main extends AppCompatActivity {
                     }
                 });
             }
-        }, 0, 20);
+        }, 0, 20);*/
     }
 
-    public void playerJump() {
+    /*public void playerJump() {
         playerY -= jumpPower;
         jumpPower -= 1.0f;
         if (jumpPower < 0) jumpPower -= 0.20f;
@@ -117,6 +127,10 @@ public class main extends AppCompatActivity {
 
     }
 
+    public void moveBackground(){
+
+    }
+
     public boolean onTouchEvent(MotionEvent event) {
         action = MotionEventCompat.getActionMasked(event);
         if (action == MotionEvent.ACTION_DOWN) {
@@ -124,5 +138,5 @@ public class main extends AppCompatActivity {
         }
         scoreLabel.setText(String.valueOf(playerY));
         return true;
-    }
+    }*/
 }
