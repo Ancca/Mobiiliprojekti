@@ -34,6 +34,7 @@ public class main extends AppCompatActivity {
     int action;
 
     float playerY = 760.0f;
+    float playerX = 100.0f;
     float boxX = 1920.0f;
 
     private Handler handler = new Handler();
@@ -49,9 +50,11 @@ public class main extends AppCompatActivity {
         box = (ImageView) findViewById(R.id.box);
         player = (ImageView) findViewById(R.id.player);
         platform = (ImageView) findViewById(R.id.platform);
-        platform2 = (ImageView) findViewById(R.id.platform);
+        platform2 = (ImageView) findViewById(R.id.platform2);
 
         platform.setY(860);
+        platform2.setY(500);
+        platform2.setX(1920);
 
 
 
@@ -64,6 +67,7 @@ public class main extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (jump) playerJump();
+                        playerFallTest();
                         moveObstacles();
                     }
                 });
@@ -76,17 +80,41 @@ public class main extends AppCompatActivity {
         jumpPower -= 1.0f;
         if (jumpPower < 0) jumpPower -= 0.20f;
         player.setY(playerY);
+        playerHitboxTest();
+    }
+
+    public void playerHitboxTest() {
         if (playerY + 5 > platform.getY()-platform.getHeight() && playerY + 5 < platform.getY()){
             player.setY(platform.getY()-platform.getHeight());
             if (action == MotionEvent.ACTION_UP) jump = false;
             jumpPower = jumpPowerDefault;
         }
+        if (playerY + 5 > platform2.getY()-platform2.getHeight() && playerY + 5 < platform2.getY()){
+            if (playerX > platform2.getX() && playerX < platform2.getX()+platform2.getWidth()){
+                player.setY(platform2.getY()-platform2.getHeight());
+                if (action == MotionEvent.ACTION_UP) jump = false;
+                jumpPower = jumpPowerDefault;
+            }
+        }
     }
+
+    public void playerFallTest() {
+        if (playerY + 5 > platform2.getY()-platform2.getHeight() && playerY + 5 < platform2.getY()){
+            if (playerX < platform2.getX() && !jump || playerX > platform2.getX()+platform2.getWidth() && !jump){
+                jump = true;
+                jumpPower = -1.0f;
+            }
+        }
+    }
+
 
     public void moveObstacles() {
         boxX -= obstacleSpeed;
         box.setX(boxX);
         if (boxX < -200) boxX = 1920;
+        platform2.setX(platform2.getX()-obstacleSpeed+5);
+        if (platform2.getX() < -200) platform2.setX(1920);
+
     }
 
     public boolean onTouchEvent(MotionEvent event) {
