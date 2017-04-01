@@ -35,7 +35,7 @@ public class main extends Activity {
     float jumpPower = jumpPowerDefault;
     float obstacleSpeedDefault = 20.0f; // Esteiden nopeus
     float obstacleSpeed = obstacleSpeedDefault;
-    int action;
+    public int action;
 
     float playerY = 760.0f;
     float playerX = 100.0f;

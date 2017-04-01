@@ -6,15 +6,15 @@ import android.graphics.Point;
 import android.graphics.Rect;
 
 /**
- * Created by Tursake on 30.3.2017.
+ * Created by Valtteri on 1.4.2017.
  */
 
-public class Player implements GameObject{
+public class Ground implements GameObject {
 
     private Rect rectangle;
     private int color;
 
-    public Player(Rect rectangle, int color){
+    public Ground(Rect rectangle, int color){
         this.rectangle = rectangle;
         this.color = color;
     }
@@ -36,23 +36,13 @@ public class Player implements GameObject{
                 point.x + rectangle.width()/2, point.y + rectangle.height()/2);
     }
 
-    public double playerPosX(){
-        double x = this.rectangle.centerX();
-        return x;
-    }
-
-    public double playerPosY(){
-        double y = this.rectangle.centerY();
+    public double groundPosY(){
+        int y = this.rectangle.centerY();
         return y;
     }
 
-    public double getPlayerHeight(){
-        double height = this.rectangle.height();
+    public int getGroundHeight(){
+        int height = this.rectangle.height() ;
         return height;
-    }
-
-    public double getPlayerWidth(){
-        double width = this.rectangle.width();
-        return width;
     }
 }
