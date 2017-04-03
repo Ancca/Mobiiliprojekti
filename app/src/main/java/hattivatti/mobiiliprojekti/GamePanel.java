@@ -27,7 +27,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private Point playerPoint;
     private Platform platform;
     private Point platformPoint;
-    private Ground ground;
     private Obstacle obstacle;
     private Point obstaclePoint;
     private ObstacleManager obstacleManager;
@@ -46,7 +45,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         getHolder().addCallback(this);
 
         thread = new MainThread(getHolder(), this);
-        ground = new Ground(new Rect(0,1080,200,1280), Color.BLACK);
         player = new Player(new Rect(-100,-100,0,0), Color.BLACK);
         playerPoint = new Point(100,880);
         platform = new Platform(new Rect(-200,-50,0,0), Color.BLACK);
@@ -109,6 +107,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         if (jump) playerMove();
         if (!jump) playerFall();
         moveObstacles();
+        System.out.println(Constants.SCREEN_HEIGHT - (player.getPlayerHeight()/2));
         player.update(playerPoint);
         platform.update(platformPoint);
         obstacle.update(obstaclePoint);
@@ -121,7 +120,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
         canvas.drawColor(Color.GRAY);
         player.draw(canvas);
-        ground.draw(canvas);
         platform.draw(canvas);
         obstacle.draw(canvas);
         obstacleManager.draw(canvas);
@@ -129,6 +127,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     public void playerMove() {
         playerPoint.set((int)player.playerPosX(),(int)player.playerPosY()-(int)jumpPower);
+        //keep player on the screen when landing
+        if(playerPoint.y >= Constants.SCREEN_HEIGHT - (player.getPlayerHeight()/2)){
+            if(jump){
+                playerPoint.y = (int)(Constants.SCREEN_HEIGHT - (player.getPlayerHeight()/2));
+                jump = false;
+                jumpPower = jumpPowerDefault;
+            }
+        }
         jumpPower -= 5.5f;
         if (jumpPower < 0) jumpPower -= 3.5f;
         playerHitboxTest();
@@ -153,14 +159,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         else if (platform.playerCollide(player)){
             playerPoint.set((int) player.playerPosX(), (int) (platform.platformPosY()+platform.getPlatformHeightHalf()+player.getPlayerHeight()/2+1));
             jumpPower = - 10.0f;
-        }
-
-        if (ground.playerCollide(player)){
-            playerPoint.set((int) player.playerPosX(), (int) (ground.groundPosY()-ground.getGroundHeight()/2-player.getPlayerHeight()/2-1));
-            jumpPower = jumpPowerDefault;
-            if (action == MotionEvent.ACTION_UP){
-                jump = false;
-            }
         }
     }
 
