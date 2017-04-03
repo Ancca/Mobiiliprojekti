@@ -5,15 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.os.Bundle;
-import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by Tursake on 30.3.2017.
@@ -29,7 +24,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private Point platformPoint;
     private Obstacle obstacle;
     private Point obstaclePoint;
-    private ObstacleManager obstacleManager;
+    private PlatformManager platformManager;
 
     int action;
     boolean jump = false; // True kun pelaaja hyppää
@@ -52,7 +47,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         obstacle = new Obstacle(new Rect(-100,-100,0,0), Color.RED);
         obstaclePoint = new Point(1300,1030);
 
-        obstacleManager = new ObstacleManager();
+        platformManager = new PlatformManager();
 
         setFocusable(true);
     }
@@ -97,9 +92,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     public void update(){
 
-        if(obstacleManager.playerCollide(player)){
+        if(platformManager.playerCollide(player)){
             System.out.println("COLLIDE");
-            playerPoint.set((int)player.playerPosX(),(int)(obstacleManager.collided.obstaclePosY()-obstacleManager.collided.getObstacleHeightHalf()));
+            playerPoint.set((int)player.playerPosX(),(int)(platformManager.collided.posY()- platformManager.collided.getHeightHalf()));
             jump = false;
             jumpPower = jumpPowerDefault;
         }
@@ -111,7 +106,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         player.update(playerPoint);
         platform.update(platformPoint);
         obstacle.update(obstaclePoint);
-        obstacleManager.update();
+        platformManager.update();
     }
 
     @Override
@@ -122,7 +117,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         player.draw(canvas);
         platform.draw(canvas);
         obstacle.draw(canvas);
-        obstacleManager.draw(canvas);
+        platformManager.draw(canvas);
     }
 
     public void playerMove() {
@@ -141,15 +136,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void moveObstacles() {
-        obstaclePoint.set((int)obstacle.obstaclePosX()-(int)obstacleSpeed, (int)obstacle.obstaclePosY());
-        if (obstacle.obstaclePosX() < -obstacle.getObstacleWidthHalf()) obstaclePoint.set(1920,1030);
-        platformPoint.set((int)platform.platformPosX()-(int)obstacleSpeed, (int)platform.platformPosY());
-        if (platform.platformPosX() < -100) platformPoint.set(600,600);
+        obstaclePoint.set((int)obstacle.posX()-(int)obstacleSpeed, (int)obstacle.posY());
+        if (obstacle.posX() < -obstacle.getWidthHalf()) obstaclePoint.set(1920,1030);
+        platformPoint.set((int)platform.posX()-(int)obstacleSpeed, (int)platform.posY());
+        if (platform.posX() < -100) platformPoint.set(600,600);
     }
 
     public void playerHitboxTest() {
         if (platform.playerCollide(player)){
-            playerPoint.set((int) player.playerPosX(), (int) (platform.platformPosY()-platform.getPlatformHeightHalf()-player.getPlayerHeight()/2-1));
+            playerPoint.set((int) player.playerPosX(), (int) (platform.posY()-platform.getHeightHalf()-player.getPlayerHeight()/2-1));
             jumpPower = jumpPowerDefault;
             if (action == MotionEvent.ACTION_UP){
                 jump = false;
@@ -157,14 +152,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
             }
         }
         else if (platform.playerCollide(player)){
-            playerPoint.set((int) player.playerPosX(), (int) (platform.platformPosY()+platform.getPlatformHeightHalf()+player.getPlayerHeight()/2+1));
+            playerPoint.set((int) player.playerPosX(), (int) (platform.posY()+platform.getHeightHalf()+player.getPlayerHeight()/2+1));
             jumpPower = - 10.0f;
         }
     }
 
     public void playerFall(){
-        if (player.playerPosY() < platform.platformPosY()){
-            if (player.playerPosX()-player.getPlayerWidth()/2 > platform.platformPosX()+platform.getPlatformWidth()/2) {
+        if (player.playerPosY() < platform.posY()){
+            if (player.playerPosX()-player.getPlayerWidth()/2 > platform.posX()+platform.getWidth()/2) {
                 jump = true;
                 jumpPower = -2.0f;
             }

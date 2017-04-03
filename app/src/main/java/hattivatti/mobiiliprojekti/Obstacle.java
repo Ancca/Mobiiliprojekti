@@ -9,7 +9,7 @@ import android.graphics.Rect;
  * Created by Valtteri on 1.4.2017.
  */
 
-public class Obstacle implements GameObject {
+public class Obstacle extends Platform {
 
     private Rect rectangle;
     private int color;
@@ -37,6 +37,7 @@ public class Obstacle implements GameObject {
 
     @Override
     public void update() {
+
     }
 
     public void update(Point point){
@@ -44,12 +45,12 @@ public class Obstacle implements GameObject {
                 point.x + rectangle.width()/2, point.y + rectangle.height()/2);
     }
 
-    public double obstaclePosX(){
+    public int posX(){
         int x = this.rectangle.centerX();
         return x;
     }
 
-    public double obstaclePosY(){
+    public int posY(){
         int y = this.rectangle.centerY();
         return y;
     }
@@ -58,12 +59,17 @@ public class Obstacle implements GameObject {
         return Rect.intersects(rectangle, player.getRectangle());
     }
 
-    public int getObstacleHeightHalf(){
-        int widthHalf = this.rectangle.height() / 2;
+    public int getHeightHalf(){
+        int heigthHalf = this.rectangle.height() / 2;
+        return heigthHalf;
+    }
+
+    public int getWidthHalf(){
+        int widthHalf = this.rectangle.width() / 2;
         return widthHalf;
     }
 
-    public int getObstacleWidthHalf(){
+    public int getWidth(){
         int widthHalf = this.rectangle.width() / 2;
         return widthHalf;
     }

@@ -23,10 +23,15 @@ public class Platform implements GameObject {
         rectangle.right += x;
     }
 
+    public Platform(){
+
+    }
+
     public Platform(Rect rectangle, int color){
         this.rectangle = rectangle;
         this.color = color;
     }
+
     @Override
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
@@ -44,12 +49,12 @@ public class Platform implements GameObject {
                 point.x + rectangle.width()/2, point.y + rectangle.height()/2);
     }
 
-    public int platformPosX(){
+    public int posX(){
         int x = this.rectangle.centerX();
         return x;
     }
 
-    public int platformPosY(){
+    public int posY(){
         int y = this.rectangle.centerY();
         return y;
     }
@@ -58,12 +63,17 @@ public class Platform implements GameObject {
         return Rect.intersects(rectangle, player.getRectangle());
     }
 
-    public int getPlatformHeightHalf(){
-        int widthHalf = this.rectangle.height() / 2;
+    public int getHeightHalf(){
+        int heigthHalf = this.rectangle.height() / 2;
+        return heigthHalf;
+    }
+
+    public int getWidthHalf(){
+        int widthHalf = this.rectangle.width() / 2;
         return widthHalf;
     }
 
-    public int getPlatformWidth(){
+    public int getWidth(){
         int widthHalf = this.rectangle.width() / 2;
         return widthHalf;
     }
