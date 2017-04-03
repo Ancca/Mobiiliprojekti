@@ -14,11 +14,19 @@ public class Platform implements GameObject {
     private Rect rectangle;
     private int color;
 
+    public Rect getRectangle(){
+        return rectangle;
+    }
+
+    public void incrementX(float x){
+        rectangle.left += x;
+        rectangle.right += x;
+    }
+
     public Platform(Rect rectangle, int color){
         this.rectangle = rectangle;
         this.color = color;
     }
-
     @Override
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
@@ -36,36 +44,27 @@ public class Platform implements GameObject {
                 point.x + rectangle.width()/2, point.y + rectangle.height()/2);
     }
 
-    public double platformPosX(){
-        double x = this.rectangle.exactCenterX();
+    public int platformPosX(){
+        int x = this.rectangle.centerX();
         return x;
     }
 
-    public double platformPosY(){
-        double y = this.rectangle.exactCenterY();
+    public int platformPosY(){
+        int y = this.rectangle.centerY();
         return y;
     }
 
-    public int getPlatformHeight(){
-        int height = this.rectangle.height();
-        return height;
+    public boolean playerCollide(Player player){
+        return Rect.intersects(rectangle, player.getRectangle());
+    }
+
+    public int getPlatformHeightHalf(){
+        int widthHalf = this.rectangle.height() / 2;
+        return widthHalf;
     }
 
     public int getPlatformWidth(){
-        int width = this.rectangle.width();
-        return width;
-    }
-
-    public int playerCollide(Player player){
-        int luku = 0;
-        if (rectangle.contains(player.getRectangle().left,player.getRectangle().top)
-                || rectangle.contains(player.getRectangle().right,player.getRectangle().top)){
-            luku = 2;
-        }
-        else if (rectangle.contains(player.getRectangle().left,player.getRectangle().bottom)
-                || rectangle.contains(player.getRectangle().right,player.getRectangle().bottom)){
-            luku = 1;
-        }
-        return luku;
+        int widthHalf = this.rectangle.width() / 2;
+        return widthHalf;
     }
 }
