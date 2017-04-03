@@ -55,4 +55,13 @@ public class Platform implements GameObject {
         int width = this.rectangle.width();
         return width;
     }
+
+    public boolean playerCollide(Player player){
+        if (rectangle.contains(player.getRectangle().left,player.getRectangle().top)
+            || rectangle.contains(player.getRectangle().right,player.getRectangle().top)
+                || rectangle.contains(player.getRectangle().left,player.getRectangle().bottom)
+                || rectangle.contains(player.getRectangle().right,player.getRectangle().bottom))
+                return true;
+        return false;
+    }
 }

@@ -11,12 +11,16 @@ import android.graphics.Rect;
 
 public class Player implements GameObject{
 
-    private Rect rectangle;
+    public Rect rectangle;
     private int color;
 
     public Player(Rect rectangle, int color){
         this.rectangle = rectangle;
         this.color = color;
+    }
+
+    public Rect getRectangle(){
+        return rectangle;
     }
 
     @Override
