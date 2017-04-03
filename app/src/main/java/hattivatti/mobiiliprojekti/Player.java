@@ -14,10 +14,6 @@ public class Player implements GameObject{
     public Rect rectangle;
     private int color;
 
-    public Rect getRectangle(){
-        return rectangle;
-    }
-
     public Player(Rect rectangle, int color){
         this.rectangle = rectangle;
         this.color = color;
