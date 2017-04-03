@@ -23,7 +23,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     private MainThread thread;
 
-    private Player player;
+    Player player;
     private Point playerPoint;
     private Platform platform;
     private Point platformPoint;
@@ -34,7 +34,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     int action;
     boolean jump = false; // True kun pelaaja hyppää
-    double jumpPowerDefault = 70.0f;
+    boolean playerOnPlatform;
+    double jumpPowerDefault = 72.5f;
     double jumpPower = jumpPowerDefault;
     double obstacleSpeedDefault = 10.0f;
     double obstacleSpeed = obstacleSpeedDefault;
@@ -45,7 +46,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         getHolder().addCallback(this);
 
         thread = new MainThread(getHolder(), this);
-        ground = new Ground(new Rect(0,980,200,1180), Color.BLACK);
+        ground = new Ground(new Rect(0,1080,200,1280), Color.BLACK);
         player = new Player(new Rect(-100,-100,0,0), Color.BLACK);
         playerPoint = new Point(100,880);
         platform = new Platform(new Rect(-200,-50,0,0), Color.BLACK);
@@ -106,7 +107,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         }
 
         if (jump) playerMove();
-        playerFallTest();
+        if (!jump) playerFall();
         moveObstacles();
         player.update(playerPoint);
         platform.update(platformPoint);
@@ -141,25 +142,33 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void playerHitboxTest() {
-        if (player.playerPosY()+(player.getPlayerHeight()/2) + 1 > ground.groundPosY()-(ground.getGroundHeight()/2) && player.playerPosY()+(player.getPlayerHeight()/2) + 1 < ground.groundPosY()+(ground.getGroundHeight()/2)){
-            playerPoint.set((int)player.playerPosX(),(int)(ground.groundPosY()-ground.getGroundHeight()+48));
-            if (action == MotionEvent.ACTION_UP) jump = false;
+        if (platform.playerCollide(player) == 1){
+            playerPoint.set((int) player.playerPosX(), (int) (platform.platformPosY()-platform.getPlatformHeight()/2-player.getPlayerHeight()/2-1));
             jumpPower = jumpPowerDefault;
+            if (action == MotionEvent.ACTION_UP){
+                jump = false;
+                playerOnPlatform = true;
+            }
         }
-        if (player.playerPosY()+(player.getPlayerHeight()/2) + 1 > platform.platformPosY()-(platform.getPlatformHeight()/2) && player.playerPosY()+(player.getPlayerHeight()/2) + 1 < platform.platformPosY()+(platform.getPlatformHeight()/2)){
-            if (player.playerPosX()+player.getPlayerWidth()/2 > platform.platformPosX()-(platform.getPlatformWidth()/2) && player.playerPosX()-player.getPlayerWidth()/2 < platform.platformPosX()+(platform.getPlatformWidth()/2)){
-                playerPoint.set((int)player.playerPosX(),(int)(platform.platformPosY()-platform.getPlatformHeight()-29));
-                if (action == MotionEvent.ACTION_UP) jump = false;
-                jumpPower = jumpPowerDefault;
+        else if (platform.playerCollide(player) == 2){
+            playerPoint.set((int) player.playerPosX(), (int) (platform.platformPosY()+platform.getPlatformHeight()/2+player.getPlayerHeight()/2+1));
+            jumpPower = - 10.0f;
+        }
+
+        if (ground.playerCollide(player)){
+            playerPoint.set((int) player.playerPosX(), (int) (ground.groundPosY()-ground.getGroundHeight()/2-player.getPlayerHeight()/2-1));
+            jumpPower = jumpPowerDefault;
+            if (action == MotionEvent.ACTION_UP){
+                jump = false;
             }
         }
     }
 
-    public void playerFallTest() {
+    public void playerFall(){
         if (player.playerPosY() < platform.platformPosY()){
-            if (player.playerPosX()+player.getPlayerWidth()/2 < platform.platformPosX()-platform.getPlatformWidth()/2 && !jump || player.playerPosX()-player.getPlayerWidth()/2 > platform.platformPosX()+platform.getPlatformWidth()/2 && !jump){
+            if (player.playerPosX()-player.getPlayerWidth()/2 > platform.platformPosX()+platform.getPlatformWidth()/2) {
                 jump = true;
-                jumpPower = -1.0f;
+                jumpPower = -2.0f;
             }
         }
     }
