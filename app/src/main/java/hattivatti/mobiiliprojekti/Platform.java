@@ -56,12 +56,16 @@ public class Platform implements GameObject {
         return width;
     }
 
-    public boolean playerCollide(Player player){
+    public int playerCollide(Player player){
+        int luku = 0;
         if (rectangle.contains(player.getRectangle().left,player.getRectangle().top)
-            || rectangle.contains(player.getRectangle().right,player.getRectangle().top)
-                || rectangle.contains(player.getRectangle().left,player.getRectangle().bottom)
-                || rectangle.contains(player.getRectangle().right,player.getRectangle().bottom))
-                return true;
-        return false;
+                || rectangle.contains(player.getRectangle().right,player.getRectangle().top)){
+            luku = 2;
+        }
+        else if (rectangle.contains(player.getRectangle().left,player.getRectangle().bottom)
+                || rectangle.contains(player.getRectangle().right,player.getRectangle().bottom)){
+            luku = 1;
+        }
+        return luku;
     }
 }

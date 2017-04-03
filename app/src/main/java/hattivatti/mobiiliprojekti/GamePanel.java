@@ -129,13 +129,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void playerHitboxTest() {
-        if (platform.playerCollide(player)){
+        if (platform.playerCollide(player) == 1){
             playerPoint.set((int) player.playerPosX(), (int) (platform.platformPosY()-platform.getPlatformHeight()/2-player.getPlayerHeight()/2-1));
             jumpPower = jumpPowerDefault;
             if (action == MotionEvent.ACTION_UP){
                 jump = false;
                 playerOnPlatform = true;
             }
+        }
+        else if (platform.playerCollide(player) == 2){
+            playerPoint.set((int) player.playerPosX(), (int) (platform.platformPosY()+platform.getPlatformHeight()/2+player.getPlayerHeight()/2+1));
+            jumpPower = - 10.0f;
         }
 
         if (ground.playerCollide(player)){
