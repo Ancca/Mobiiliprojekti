@@ -30,6 +30,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private Ground ground;
     private Obstacle obstacle;
     private Point obstaclePoint;
+    private ObstacleManager obstacleManager;
 
     int action;
     boolean jump = false; // True kun pelaaja hyppää
@@ -51,6 +52,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         platformPoint = new Point(1000,650);
         obstacle = new Obstacle(new Rect(-100,-100,0,0), Color.RED);
         obstaclePoint = new Point(1300,1030);
+
+        obstacleManager = new ObstacleManager();
 
         setFocusable(true);
     }
@@ -94,12 +97,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void update(){
+
+        if(obstacleManager.playerCollide(player)){
+            System.out.println("COLLIDE");
+            playerPoint.set((int)player.playerPosX(),(int)(obstacleManager.collided.obstaclePosY()-obstacleManager.collided.getObstacleHeightHalf()));
+            jump = false;
+            jumpPower = jumpPowerDefault;
+        }
+
         if (jump) playerMove();
         playerFallTest();
         moveObstacles();
         player.update(playerPoint);
         platform.update(platformPoint);
         obstacle.update(obstaclePoint);
+        obstacleManager.update();
     }
 
     @Override
@@ -111,6 +123,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         ground.draw(canvas);
         platform.draw(canvas);
         obstacle.draw(canvas);
+        obstacleManager.draw(canvas);
     }
 
     public void playerMove() {
@@ -122,7 +135,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     public void moveObstacles() {
         obstaclePoint.set((int)obstacle.obstaclePosX()-(int)obstacleSpeed, (int)obstacle.obstaclePosY());
-        if (obstacle.obstaclePosX() < -50) obstaclePoint.set(1920,1030);
+        if (obstacle.obstaclePosX() < -obstacle.getObstacleWidthHalf()) obstaclePoint.set(1920,1030);
         platformPoint.set((int)platform.platformPosX()-(int)obstacleSpeed, (int)platform.platformPosY());
         if (platform.platformPosX() < -100) platformPoint.set(600,600);
     }

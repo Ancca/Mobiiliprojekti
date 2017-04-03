@@ -14,6 +14,15 @@ public class Obstacle implements GameObject {
     private Rect rectangle;
     private int color;
 
+    public Rect getRectangle(){
+        return rectangle;
+    }
+
+    public void incrementX(float x){
+        rectangle.left += x;
+        rectangle.right += x;
+    }
+
     public Obstacle(Rect rectangle, int color){
         this.rectangle = rectangle;
         this.color = color;
@@ -28,7 +37,6 @@ public class Obstacle implements GameObject {
 
     @Override
     public void update() {
-
     }
 
     public void update(Point point){
@@ -46,8 +54,17 @@ public class Obstacle implements GameObject {
         return y;
     }
 
-    public int getObstacleHeight(){
-        int height = this.rectangle.height();
-        return height;
+    public boolean playerCollide(Player player){
+        return Rect.intersects(rectangle, player.getRectangle());
+    }
+
+    public int getObstacleHeightHalf(){
+        int widthHalf = this.rectangle.height() / 2;
+        return widthHalf;
+    }
+
+    public int getObstacleWidthHalf(){
+        int widthHalf = this.rectangle.width() / 2;
+        return widthHalf;
     }
 }
