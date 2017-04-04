@@ -54,9 +54,4 @@ public class Player implements GameObject{
         double height = this.rectangle.height();
         return height;
     }
-
-    public double getPlayerWidth(){
-        double width = this.rectangle.width();
-        return width;
-    }
 }

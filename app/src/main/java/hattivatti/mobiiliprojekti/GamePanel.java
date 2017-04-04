@@ -14,38 +14,31 @@ import android.support.v4.view.MotionEventCompat;
  * Created by Tursake on 30.3.2017.
  */
 
-public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
+public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
 
     Player player;
+    Player player2;
     private Point playerPoint;
-    private Platform platform;
-    private Point platformPoint;
-    private Obstacle obstacle;
-    private Point obstaclePoint;
+    private Point player2Point;
     private PlatformManager platformManager;
 
     int action;
     boolean jump = false; // True kun pelaaja hyppää
-    boolean playerOnPlatform;
     double jumpPowerDefault = 72.5f;
     double jumpPower = jumpPowerDefault;
-    double obstacleSpeedDefault = 10.0f;
-    double obstacleSpeed = obstacleSpeedDefault;
 
-    public GamePanel(Context context){
+    public GamePanel(Context context) {
         super(context);
 
         getHolder().addCallback(this);
 
         thread = new MainThread(getHolder(), this);
-        player = new Player(new Rect(-100,-100,0,0), Color.BLACK);
-        playerPoint = new Point(100,880);
-        platform = new Platform(new Rect(-200,-50,0,0), Color.BLACK);
-        platformPoint = new Point(1000,650);
-        obstacle = new Obstacle(new Rect(-100,-100,0,0), Color.RED);
-        obstaclePoint = new Point(1300,1030);
+        player = new Player(new Rect(100, 100, 200, 200), Color.BLACK);
+        playerPoint = new Point(100, 880);
+        player2 = new Player(new Rect(100, 100, 200, 200), Color.WHITE);
+        player2Point = new Point(100, 885);
 
         platformManager = new PlatformManager();
 
@@ -64,17 +57,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         thread.setRunning(true);
         thread.start();
         jumpPower = -1;
+        jump = true;
+        action = 1;
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         boolean retry = true;
 
-        while(retry){
+        while (retry) {
             try {
                 thread.setRunning(false);
                 thread.join();
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             retry = false;
@@ -90,23 +85,24 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         return true;
     }
 
-    public void update(){
+    public void update() {
+        if (jump) playerMove();
+        player.update(playerPoint);
+        player2.update(player2Point);
+        platformManager.update();
 
-        if(platformManager.playerCollide(player)){
+        if (platformManager.playerCollide(player)) {
             System.out.println("COLLIDE");
-            playerPoint.set((int)player.playerPosX(),(int)(platformManager.collided.posY()- platformManager.collided.getHeightHalf()));
-            jump = false;
+            playerPoint.set((int) player.playerPosX(), (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2));
+            player2Point.set((int) player.playerPosX(), (int) playerPoint.y + 5);
+            if (action == MotionEvent.ACTION_UP) jump = false;
             jumpPower = jumpPowerDefault;
         }
-
-        if (jump) playerMove();
-        if (!jump) playerFall();
-        moveObstacles();
-        System.out.println(Constants.SCREEN_HEIGHT - (player.getPlayerHeight()/2));
-        player.update(playerPoint);
-        platform.update(platformPoint);
-        obstacle.update(obstaclePoint);
-        platformManager.update();
+        else if (platformManager.playerCollide(player2) != true && (!jump) && player.playerPosY() < 1030) {
+            System.out.println("FALL");
+            jump = true;
+            jumpPower = 0.0f;
+        }
     }
 
     @Override
@@ -115,54 +111,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
         canvas.drawColor(Color.GRAY);
         player.draw(canvas);
-        platform.draw(canvas);
-        obstacle.draw(canvas);
         platformManager.draw(canvas);
+        //player2.draw(canvas);
     }
 
     public void playerMove() {
-        playerPoint.set((int)player.playerPosX(),(int)player.playerPosY()-(int)jumpPower);
-        //keep player on the screen when landing
-        if(playerPoint.y >= Constants.SCREEN_HEIGHT - (player.getPlayerHeight()/2)){
-            if(jump){
-                playerPoint.y = (int)(Constants.SCREEN_HEIGHT - (player.getPlayerHeight()/2));
-                jump = false;
-                jumpPower = jumpPowerDefault;
-            }
-        }
         jumpPower -= 5.5f;
         if (jumpPower < 0) jumpPower -= 3.5f;
-        playerHitboxTest();
-    }
-
-    public void moveObstacles() {
-        obstaclePoint.set((int)obstacle.posX()-(int)obstacleSpeed, (int)obstacle.posY());
-        if (obstacle.posX() < -obstacle.getWidthHalf()) obstaclePoint.set(1920,1030);
-        platformPoint.set((int)platform.posX()-(int)obstacleSpeed, (int)platform.posY());
-        if (platform.posX() < -100) platformPoint.set(600,600);
-    }
-
-    public void playerHitboxTest() {
-        if (platform.playerCollide(player)){
-            playerPoint.set((int) player.playerPosX(), (int) (platform.posY()-platform.getHeightHalf()-player.getPlayerHeight()/2-1));
+        playerPoint.set((int) player.playerPosX(), (int) player.playerPosY() - (int) jumpPower);
+        player2Point.set((int) player.playerPosX(), (int) playerPoint.y + 5);
+        //keep player on the screen when landing
+        if (playerPoint.y > Constants.SCREEN_HEIGHT - (player.getPlayerHeight() / 2)) {
+            jump = false;
+            playerPoint.y = (int) (Constants.SCREEN_HEIGHT - (player.getPlayerHeight() / 2));
+            player2Point.y = (int) playerPoint.y + 5;
+            if (action == MotionEvent.ACTION_DOWN) jump = true;
             jumpPower = jumpPowerDefault;
-            if (action == MotionEvent.ACTION_UP){
-                jump = false;
-                playerOnPlatform = true;
-            }
-        }
-        else if (platform.playerCollide(player)){
-            playerPoint.set((int) player.playerPosX(), (int) (platform.posY()+platform.getHeightHalf()+player.getPlayerHeight()/2+1));
-            jumpPower = - 10.0f;
-        }
-    }
-
-    public void playerFall(){
-        if (player.playerPosY() < platform.posY()){
-            if (player.playerPosX()-player.getPlayerWidth()/2 > platform.posX()+platform.getWidth()/2) {
-                jump = true;
-                jumpPower = -2.0f;
-            }
         }
     }
 }
