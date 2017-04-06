@@ -11,6 +11,7 @@ import android.graphics.Rect;
 
 public class Obstacle extends Platform {
 
+    public boolean isPowerUp = false;
     private Rect rectangle;
     private int color;
 

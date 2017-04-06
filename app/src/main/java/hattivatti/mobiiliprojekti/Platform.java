@@ -12,6 +12,7 @@ import android.graphics.Rect;
 
 public class Platform implements GameObject {
 
+    public boolean isPowerUp = false;
     private Rect rectangle;
     private int color;
 

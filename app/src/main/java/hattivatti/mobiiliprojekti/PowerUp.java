@@ -10,8 +10,9 @@ import android.graphics.Rect;
  * Created by Valtteri on 6.4.2017.
  */
 
-public class PowerUp implements GameObject {
+public class PowerUp extends Platform {
 
+    public boolean isPowerUp;
     private Rect rectangle;
     private int color;
 
@@ -24,9 +25,10 @@ public class PowerUp implements GameObject {
         rectangle.right += x;
     }
 
-    public PowerUp(Rect rectangle, int color){
-        this.rectangle = rectangle;
+    public PowerUp(int top, int platformWidth, int platformHeight, int color){
+        this.rectangle = new Rect(Constants.SCREEN_WIDTH, top, (Constants.SCREEN_WIDTH + platformWidth), (top + platformHeight));
         this.color = color;
+        isPowerUp = true;
     }
 
     @Override

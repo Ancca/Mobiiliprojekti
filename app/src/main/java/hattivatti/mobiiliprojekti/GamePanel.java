@@ -111,11 +111,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (jump) playerMove();
         player.update(playerPoint);
         player2.update(player2Point);
-<<<<<<< HEAD
         bgManager.update();
-=======
         player3.update(player3Point);
->>>>>>> origin/master
         platformManager.update();
         if (powerUpSpeed) powerUpSpeedTimer--;
         if (powerUpSpeedTimer <= 0){
@@ -125,31 +122,32 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         if (platformManager.playerCollide(player3)) {
-            System.out.println("COLLIDE");
-            playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
-            player2Point.y = playerPoint.y + 5;
-            player3Point.y = playerPoint.y;
-            if (action == MotionEvent.ACTION_UP) jump = false;
-            jumpPower = jumpPowerDefault;
-            if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
+            if (platformManager.poweredUp) {
+                System.out.println("POWERED UP");
+                if (platformManager.collidedpw.powerUpColorTest(Color.GREEN)){
+                    if (!powerUpSpeed){
+                        powerUpSpeed = true;
+                        platformManager.increaseSpeed();
+                    }
+                    if (powerUpSpeed){
+                        powerUpSpeedTimer = powerUpSpeedTimer + 100;
+                    }
+                }
+                platformManager.platforms.remove(platformManager.collidedpw);
+            } else {
+                System.out.println("COLLIDE");
+                playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
+                player2Point.y = playerPoint.y + 5;
+                player3Point.y = playerPoint.y;
+                if (action == MotionEvent.ACTION_UP) jump = false;
+                jumpPower = jumpPowerDefault;
+                if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
+            }
         }
         else if (platformManager.playerCollide(player2) != true && (!jump) && player.playerPosY() < 1030) {
             System.out.println("FALL");
             jump = true;
             jumpPower = 0.0f;
-        }
-        if (platformManager.playerPowerUp(player)) {
-            System.out.println("POWERED UP");
-            if (platformManager.poweredUp.powerUpColorTest(Color.GREEN)){
-                if (!powerUpSpeed){
-                    powerUpSpeed = true;
-                    platformManager.increaseSpeed();
-                }
-                if (powerUpSpeed){
-                    powerUpSpeedTimer = powerUpSpeedTimer + 100;
-                }
-                platformManager.powerups.remove(platformManager.powerups.size() - 1);
-            }
         }
     }
 
