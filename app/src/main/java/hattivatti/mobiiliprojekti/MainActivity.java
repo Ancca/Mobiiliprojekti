@@ -23,7 +23,9 @@ import java.security.acl.Group;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity{
+
+    public boolean levelEnd = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,6 @@ public class MainActivity extends Activity {
         Constants.SCREEN_HEIGHT = dm.heightPixels;
         Constants.SCALE = dm.scaledDensity;
 
-        setContentView(new GamePanel(this));
+        setContentView( new GamePanel(this));
     }
 }

@@ -20,7 +20,9 @@ public class PlatformManager {
     private long startTime;
     public Platform collided;
     public PowerUp collidedpw;
+    public Goal collidedgoal;
     public boolean poweredUp;
+    public boolean goalReached;
     float speed = Constants.SCREEN_HEIGHT/4000.0f;
 
     public PlatformManager(){
@@ -41,11 +43,11 @@ public class PlatformManager {
         platformStorage.add(new Platform(850,200,50, Color.BLUE));
         platformStorage.add(new PowerUp(650,50,50, Color.GREEN));
         platformStorage.add(new Obstacle(450,200,50, Color.RED));
-        platformStorage.add(new Platform(850,200,50, Color.BLUE));
+        /*platformStorage.add(new Platform(850,200,50, Color.BLUE));
         platformStorage.add(new Obstacle(450,200,50, Color.RED));
-        platformStorage.add(new Platform(850,200,50, Color.BLUE));
+        platformStorage.add(new Platform(850,200,50, Color.BLUE));*/
         platformStorage.add(new Obstacle(450,200,50, Color.RED));
-        platformStorage.add(new Platform(0,50,Constants.SCREEN_WIDTH, Color.GREEN));
+        platformStorage.add(new Goal(0,50,Constants.SCREEN_WIDTH, Color.GREEN));
 
     }
 
@@ -55,7 +57,10 @@ public class PlatformManager {
                 if(plat instanceof PowerUp) {
                     poweredUp = true;
                     collidedpw = (PowerUp)plat;
-                } else {
+                } else if(plat instanceof  Goal) {
+                    goalReached = true;
+                    collidedgoal = (Goal)plat;
+                }else {
                     collided = plat;
                 }
                 return true;

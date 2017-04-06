@@ -14,6 +14,7 @@ public class Background {
     private long startTime;
     Bitmap background;
     Bitmap background2;
+    public int bgspeed = 5;
     float x_layer1bg1 = 0;
     float x_layer1bg2 = Constants.SCREEN_WIDTH;
     float x_layer2bg1 = 0;
@@ -33,10 +34,10 @@ public class Background {
 
         /*x += -speed * elapsedTime;
         x2 += -speed * elapsedTime;*/
-        x_layer1bg1 -= 15;
-        x_layer1bg2 -= 15;
-        x_layer2bg1 -= 5;
-        x_layer2bg2 -= 5;
+        x_layer1bg1 -= bgspeed * 3;
+        x_layer1bg2 -= bgspeed * 3;
+        x_layer2bg1 -= bgspeed;
+        x_layer2bg2 -= bgspeed;
 
         if(x_layer1bg1 <= -Constants.SCREEN_WIDTH){
             x_layer1bg1 = Constants.SCREEN_WIDTH;
