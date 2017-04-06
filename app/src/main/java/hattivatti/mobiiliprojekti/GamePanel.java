@@ -1,8 +1,11 @@
 package hattivatti.mobiiliprojekti;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.MotionEvent;
@@ -23,11 +26,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Point playerPoint;
     private Point player2Point;
     private PlatformManager platformManager;
+    private Background bgManager;
 
     int action;
     boolean jump = false; // True kun pelaaja hyppää
     double jumpPowerDefault = 72.5f;
     double jumpPower = jumpPowerDefault;
+
+    Bitmap unscaledBackground;
+    Bitmap background;
+    Bitmap unscaledBackground2;
+    Bitmap background2;
 
     public GamePanel(Context context) {
         super(context);
@@ -40,7 +49,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         player2 = new Player(new Rect(100, 100, 200, 200), Color.WHITE);
         player2Point = new Point(100, 885);
 
+        unscaledBackground = BitmapFactory.decodeResource(getResources(), R.drawable.background);
+        background = Bitmap.createScaledBitmap(unscaledBackground, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
+
+        unscaledBackground2 = BitmapFactory.decodeResource(getResources(), R.drawable.background2);
+        background2 = Bitmap.createScaledBitmap(unscaledBackground2, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
+
         platformManager = new PlatformManager();
+        bgManager = new Background(background, background2);
 
         setFocusable(true);
     }
@@ -89,6 +105,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (jump) playerMove();
         player.update(playerPoint);
         player2.update(player2Point);
+        bgManager.update();
         platformManager.update();
 
         if (platformManager.playerCollide(player)) {
@@ -109,7 +126,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        canvas.drawColor(Color.GRAY);
+        //canvas.drawColor(Color.GRAY);
+        bgManager.draw(canvas);
         player.draw(canvas);
         platformManager.draw(canvas);
         //player2.draw(canvas);

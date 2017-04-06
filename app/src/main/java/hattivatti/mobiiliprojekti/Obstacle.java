@@ -23,8 +23,8 @@ public class Obstacle extends Platform {
         rectangle.right += x;
     }
 
-    public Obstacle(Rect rectangle, int color){
-        this.rectangle = rectangle;
+    public Obstacle(int top, int platformWidth, int platformHeight, int color){
+        this.rectangle = new Rect(Constants.SCREEN_WIDTH, top, (Constants.SCREEN_WIDTH + platformWidth), (top + platformHeight));
         this.color = color;
     }
 

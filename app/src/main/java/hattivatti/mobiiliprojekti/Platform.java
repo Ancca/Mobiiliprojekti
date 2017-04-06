@@ -27,8 +27,8 @@ public class Platform implements GameObject {
 
     }
 
-    public Platform(Rect rectangle, int color){
-        this.rectangle = rectangle;
+    public Platform(int top, int platformWidth, int platformHeight, int color){
+        this.rectangle = new Rect(Constants.SCREEN_WIDTH, top, (Constants.SCREEN_WIDTH + platformWidth), (top + platformHeight));
         this.color = color;
     }
 
