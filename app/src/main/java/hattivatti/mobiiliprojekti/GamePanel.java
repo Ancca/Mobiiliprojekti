@@ -21,17 +21,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
 
-    Player player;
-    Player player2;
+    Player player; // Pelaaja1 (Ohjattava pelaaja)
+    Player player2;// Pelaaja2 (Tarkistaa milloin pelaajan pitäisi tippua alas)
+    Player player3; // Pelaaja3 (Tarkistaa milloin pelaaja on osumassa platformiin)
     private Point playerPoint;
     private Point player2Point;
+    private Point player3Point;
     private PlatformManager platformManager;
     private Background bgManager;
 
-    int action;
+    int action; // Toiminta (Klikkaus)
     boolean jump = false; // True kun pelaaja hyppää
     double jumpPowerDefault = 72.5f;
-    double jumpPower = jumpPowerDefault;
+    double jumpPower = jumpPowerDefault; // Pelaajan alkunopeus hypättäessä
+    int powerUpSpeedTimer = 100;
+    boolean powerUpSpeed = false;
 
     Bitmap unscaledBackground;
     Bitmap background;
@@ -48,6 +52,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         playerPoint = new Point(100, 880);
         player2 = new Player(new Rect(100, 100, 200, 200), Color.WHITE);
         player2Point = new Point(100, 885);
+        player3 = new Player(new Rect(100, 100, 200, 200), Color.WHITE);
+        player3Point = new Point(100, 880);
 
         unscaledBackground = BitmapFactory.decodeResource(getResources(), R.drawable.background);
         background = Bitmap.createScaledBitmap(unscaledBackground, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
@@ -105,20 +111,45 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (jump) playerMove();
         player.update(playerPoint);
         player2.update(player2Point);
+<<<<<<< HEAD
         bgManager.update();
+=======
+        player3.update(player3Point);
+>>>>>>> origin/master
         platformManager.update();
+        if (powerUpSpeed) powerUpSpeedTimer--;
+        if (powerUpSpeedTimer <= 0){
+            platformManager.decreaseSpeed();
+            powerUpSpeedTimer = 100;
+            powerUpSpeed = false;
+        }
 
-        if (platformManager.playerCollide(player)) {
+        if (platformManager.playerCollide(player3)) {
             System.out.println("COLLIDE");
-            playerPoint.set((int) player.playerPosX(), (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2));
-            player2Point.set((int) player.playerPosX(), (int) playerPoint.y + 5);
+            playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
+            player2Point.y = playerPoint.y + 5;
+            player3Point.y = playerPoint.y;
             if (action == MotionEvent.ACTION_UP) jump = false;
             jumpPower = jumpPowerDefault;
+            if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
         }
         else if (platformManager.playerCollide(player2) != true && (!jump) && player.playerPosY() < 1030) {
             System.out.println("FALL");
             jump = true;
             jumpPower = 0.0f;
+        }
+        if (platformManager.playerPowerUp(player)) {
+            System.out.println("POWERED UP");
+            if (platformManager.poweredUp.powerUpColorTest(Color.GREEN)){
+                if (!powerUpSpeed){
+                    powerUpSpeed = true;
+                    platformManager.increaseSpeed();
+                }
+                if (powerUpSpeed){
+                    powerUpSpeedTimer = powerUpSpeedTimer + 100;
+                }
+                platformManager.powerups.remove(platformManager.powerups.size() - 1);
+            }
         }
     }
 
@@ -130,21 +161,27 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         bgManager.draw(canvas);
         player.draw(canvas);
         platformManager.draw(canvas);
-        //player2.draw(canvas);
+        //player2.draw(canvas); // Pelaajia 2 ja 3 ei piirretä ollenkaan
+        //player3.draw(canvas);
     }
 
     public void playerMove() {
         jumpPower -= 5.5f;
+        if (powerUpSpeed) jumpPower -= 5.5f;
         if (jumpPower < 0) jumpPower -= 3.5f;
-        playerPoint.set((int) player.playerPosX(), (int) player.playerPosY() - (int) jumpPower);
-        player2Point.set((int) player.playerPosX(), (int) playerPoint.y + 5);
-        //keep player on the screen when landing
+        if (jumpPower < 0 && powerUpSpeed) jumpPower -= 3.5f;
+        playerPoint.y = (int) player.playerPosY() - (int) jumpPower;
+        player2Point.y = playerPoint.y + 5;
+        player3Point.y = playerPoint.y - (int) jumpPower;
+        // Pidetään pelaaja ruudulla, kun se tippuu alas
         if (playerPoint.y > Constants.SCREEN_HEIGHT - (player.getPlayerHeight() / 2)) {
             jump = false;
             playerPoint.y = (int) (Constants.SCREEN_HEIGHT - (player.getPlayerHeight() / 2));
-            player2Point.y = (int) playerPoint.y + 5;
+            player2Point.y = playerPoint.y + 5;
+            player3Point.y = playerPoint.y;
             if (action == MotionEvent.ACTION_DOWN) jump = true;
             jumpPower = jumpPowerDefault;
+            if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
         }
     }
 }
