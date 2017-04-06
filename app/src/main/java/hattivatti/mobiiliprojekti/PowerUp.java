@@ -7,10 +7,10 @@ import android.graphics.Point;
 import android.graphics.Rect;
 
 /**
- * Created by Valtteri on 1.4.2017.
+ * Created by Valtteri on 6.4.2017.
  */
 
-public class Platform implements GameObject {
+public class PowerUp implements GameObject {
 
     private Rect rectangle;
     private int color;
@@ -24,11 +24,7 @@ public class Platform implements GameObject {
         rectangle.right += x;
     }
 
-    public Platform(){
-
-    }
-
-    public Platform(Rect rectangle, int color){
+    public PowerUp(Rect rectangle, int color){
         this.rectangle = rectangle;
         this.color = color;
     }
@@ -64,18 +60,10 @@ public class Platform implements GameObject {
         return Rect.intersects(rectangle, player.getRectangle());
     }
 
-    public int getHeightHalf(){
-        int heigthHalf = this.rectangle.height() / 2;
-        return heigthHalf;
-    }
-
-    public int getWidthHalf(){
-        int widthHalf = this.rectangle.width() / 2;
-        return widthHalf;
-    }
-
-    public int getWidth(){
-        int widthHalf = this.rectangle.width() / 2;
-        return widthHalf;
+    public boolean powerUpColorTest(int col){
+        if (this.color == col){
+            return true;
+        }
+        return false;
     }
 }
