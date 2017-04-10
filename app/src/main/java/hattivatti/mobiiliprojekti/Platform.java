@@ -15,6 +15,7 @@ public class Platform implements GameObject {
     public boolean isPowerUp = false;
     private Rect rectangle;
     private int color;
+    public int platformId;
 
     public Rect getRectangle(){
         return rectangle;
@@ -29,9 +30,15 @@ public class Platform implements GameObject {
 
     }
 
+<<<<<<< HEAD
     public Platform(int top, int platformWidth, int platformHeight, int color){
         this.rectangle = new Rect(Constants.SCREEN_WIDTH + 50, top, (Constants.SCREEN_WIDTH + platformWidth + 50), (top + platformHeight));
+=======
+    public Platform(int top, int platformWidth, int platformHeight, int color, int id){
+        this.rectangle = new Rect(Constants.SCREEN_WIDTH, top, (Constants.SCREEN_WIDTH + platformWidth), (top + platformHeight));
+>>>>>>> origin/master
         this.color = color;
+        this.platformId = id;
     }
 
     @Override
@@ -78,5 +85,17 @@ public class Platform implements GameObject {
     public int getWidth(){
         int widthHalf = this.rectangle.width() / 2;
         return widthHalf;
+    }
+
+    public boolean ColorTest(int col){
+        if (this.color == col){
+            return true;
+        }
+        return false;
+    }
+
+    public int getId(){
+        int id = this.platformId;
+        return id;
     }
 }

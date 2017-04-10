@@ -25,6 +25,7 @@ public class GameplayScene implements Scene {
     private Point player3Point;
     private PlatformManager platformManager;
     private Background bgManager;
+    public boolean goalReached = false;
 
     int action; // Toiminta (Klikkaus)
     boolean jump = false; // True kun pelaaja hyppää
@@ -76,7 +77,7 @@ public class GameplayScene implements Scene {
             powerUpSpeed = false;
         }
 
-        if (platformManager.playerCollide(player3)) {
+        /*if (platformManager.playerCollide(player3)) {
             if (platformManager.poweredUp) {
                 System.out.println("POWERED UP");
                 if (platformManager.collidedpw.powerUpColorTest(Color.GREEN)){
@@ -108,8 +109,50 @@ public class GameplayScene implements Scene {
             System.out.println("FALL");
             jump = true;
             jumpPower = 0.0f;
+        }*/
+        if (platformManager.playerCollide(player3) && platformManager.collided != null){
+            if (platformManager.collided.platformId == 1){
+                System.out.println("COLLIDE");
+                playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
+                player2Point.y = playerPoint.y + 5;
+                player3Point.y = playerPoint.y;
+                if (action == MotionEvent.ACTION_UP) jump = false;
+                jumpPower = jumpPowerDefault;
+                if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
+            }
+            if (platformManager.collided.platformId == 2){
+
+            }
+            if (platformManager.collided.platformId == 3){
+                System.out.println("POWERED UP");
+                if (platformManager.collided.ColorTest(Color.GREEN)){
+                    if (!powerUpSpeed){
+                        powerUpSpeed = true;
+                        platformManager.increaseSpeed();
+                    }
+                    if (powerUpSpeed){
+                        powerUpSpeedTimer = powerUpSpeedTimer + 100;
+                    }
+                }
+            }
+            if (platformManager.collided.platformId == 4){
+                System.out.println("GOAL");
+                platformManager.speed = 0;
+                bgManager.bgspeed = 0;
+                jumpPower = 0;
+                goalReached = true;
+            }
+            else {
+                System.out.println("ASD");
+            }
+        }
+        else if (platformManager.playerCollide(player2) != true && (!jump) && player.playerPosY() < 1030) {
+            System.out.println("FALL");
+            jump = true;
+            jumpPower = 0.0f;
         }
     }
+
 
     @Override
     public void draw(Canvas canvas) {
@@ -119,7 +162,7 @@ public class GameplayScene implements Scene {
         platformManager.draw(canvas);
         //player2.draw(canvas); // Pelaajia 2 ja 3 ei piirretä ollenkaan
         //player3.draw(canvas);
-        if(platformManager.goalReached){
+        if(goalReached){
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
             paint.setTextSize(300);
@@ -133,7 +176,7 @@ public class GameplayScene implements Scene {
     public void receiveMethod(MotionEvent event){
         action = MotionEventCompat.getActionMasked(event);
         if (action == MotionEvent.ACTION_DOWN) {
-            if(!platformManager.goalReached) {
+            if(!goalReached) {
                 jump = true;
             }
         }
