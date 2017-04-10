@@ -60,4 +60,12 @@ public class Background {
         canvas.drawBitmap(background2,x_layer2bg1,0,null);
         canvas.drawBitmap(background2,x_layer2bg2,0,null);
     }
+
+    public void inceaseBGSpeed(){
+        bgspeed = 5;
+    }
+
+    public void decreaseBGSpeed(){
+        bgspeed = 5;
+    }
 }

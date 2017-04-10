@@ -56,7 +56,6 @@ public class PlatformManager {
         platformStorage.add(new Platform(450,200,50, Color.RED, 1));
         platformStorage.add(new Platform(650,200,50, Color.RED, 1));
         platformStorage.add(new Platform(0,50,1080, Color.GREEN, 4));
-
     }
     public boolean playerCollide(Player player){
         for(Platform plat : platforms){

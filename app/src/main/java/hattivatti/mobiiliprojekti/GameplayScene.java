@@ -60,6 +60,7 @@ public class GameplayScene implements Scene {
         jumpPower = -1;
         jump = true;
         action = 1;
+
     }
 
     @Override
@@ -73,6 +74,7 @@ public class GameplayScene implements Scene {
         if (powerUpSpeed) powerUpSpeedTimer--;
         if (powerUpSpeedTimer <= 0){
             platformManager.decreaseSpeed();
+            bgManager.decreaseBGSpeed();
             powerUpSpeedTimer = 100;
             powerUpSpeed = false;
         }
@@ -96,10 +98,12 @@ public class GameplayScene implements Scene {
                     if (!powerUpSpeed){
                         powerUpSpeed = true;
                         platformManager.increaseSpeed();
+                        bgManager.inceaseBGSpeed();
                     }
                     if (powerUpSpeed){
                         powerUpSpeedTimer = powerUpSpeedTimer + 100;
                     }
+                    platformManager.platforms.remove(platformManager.collided);
                 }
             }
             if (platformManager.collided.platformId == 4){
@@ -128,9 +132,12 @@ public class GameplayScene implements Scene {
         platformManager.draw(canvas);
         //player2.draw(canvas); // Pelaajia 2 ja 3 ei piirretä ollenkaan
         //player3.draw(canvas);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        if (powerUpSpeed){
+            canvas.drawRect(1500,50,1500+powerUpSpeedTimer*2,75,paint);
+        }
         if(goalReached){
-            Paint paint = new Paint();
-            paint.setColor(Color.BLACK);
             paint.setTextSize(300);
             paint.setTextAlign(Paint.Align.CENTER);
             canvas.drawText("GOAL!",Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2, paint);
@@ -149,21 +156,21 @@ public class GameplayScene implements Scene {
     }
 
     public void playerMove() {
+        playerPoint.y = (int) player.playerPosY() - (int) jumpPower;
+        player2Point.y = playerPoint.y + 5;
         jumpPower -= 5.5f;
         if (powerUpSpeed) jumpPower -= 5.5f;
         if (jumpPower < 0) jumpPower -= 3.5f;
         if (jumpPower < 0 && powerUpSpeed) jumpPower -= 3.5f;
-        playerPoint.y = (int) player.playerPosY() - (int) jumpPower;
-        player2Point.y = playerPoint.y + 5;
         player3Point.y = playerPoint.y - (int) jumpPower;
         // Pidetään pelaaja ruudulla, kun se tippuu maahan
         if (playerPoint.y > Constants.SCREEN_HEIGHT - (player.getPlayerHeight() / 2)) {
             jump = false;
+            jumpPower = jumpPowerDefault;
             playerPoint.y = (int) (Constants.SCREEN_HEIGHT - (player.getPlayerHeight() / 2));
             player2Point.y = playerPoint.y + 5;
             player3Point.y = playerPoint.y;
             if (action == MotionEvent.ACTION_DOWN) jump = true;
-            jumpPower = jumpPowerDefault;
             if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
         }
     }
