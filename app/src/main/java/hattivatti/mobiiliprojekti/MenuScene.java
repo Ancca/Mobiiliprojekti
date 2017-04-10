@@ -40,7 +40,7 @@ public class MenuScene implements Scene {
         unscaledBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
         background = Bitmap.createScaledBitmap(unscaledBackground, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
 
-        unscaledBackground2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.background2);
+        unscaledBackground2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundsky);
         background2 = Bitmap.createScaledBitmap(unscaledBackground2, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
 
         bgManager = new Background(background, background2);

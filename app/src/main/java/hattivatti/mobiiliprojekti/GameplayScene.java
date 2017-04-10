@@ -46,10 +46,10 @@ public class GameplayScene implements Scene {
         player3 = new Player(new Rect(100, 100, 200, 200), Color.WHITE);
         player3Point = new Point(100, 880);
 
-        unscaledBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
+        unscaledBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.background5);
         background = Bitmap.createScaledBitmap(unscaledBackground, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
 
-        unscaledBackground2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.background2);
+        unscaledBackground2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundsky5);
         background2 = Bitmap.createScaledBitmap(unscaledBackground2, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
 
         unscaledPause = BitmapFactory.decodeResource(context.getResources(), R.drawable.pause);
