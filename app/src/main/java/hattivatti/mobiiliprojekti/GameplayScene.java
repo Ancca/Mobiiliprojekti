@@ -33,13 +33,11 @@ public class GameplayScene implements Scene {
     double jumpPower = jumpPowerDefault; // Pelaajan alkunopeus hypättäessä
     int powerUpSpeedTimer = 100;
     boolean powerUpSpeed = false;
+    boolean paused = false;
 
-    Bitmap unscaledBackground;
-    Bitmap background;
-    Bitmap unscaledBackground2;
-    Bitmap background2;
+    Bitmap unscaledBackground, background, unscaledBackground2, background2, unscaledPause, pause;
 
-    public GameplayScene(Context context){
+    public GameplayScene(Context context, int levelNumber){
 
         player = new Player(new Rect(100, 100, 200, 200), Color.BLACK);
         playerPoint = new Point(100, 880);
@@ -54,7 +52,10 @@ public class GameplayScene implements Scene {
         unscaledBackground2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.background2);
         background2 = Bitmap.createScaledBitmap(unscaledBackground2, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
 
-        platformManager = new PlatformManager();
+        unscaledPause = BitmapFactory.decodeResource(context.getResources(), R.drawable.pause);
+        pause = resize(unscaledPause, Constants.SCREEN_WIDTH/10, Constants.SCREEN_HEIGHT/10);
+
+        platformManager = new PlatformManager(levelNumber);
         bgManager = new Background(background, background2);
 
         jumpPower = -1;
@@ -64,7 +65,9 @@ public class GameplayScene implements Scene {
 
     @Override
     public void update() {
-        if (jump) playerMove();
+        if(!paused) {
+            if (jump) playerMove();
+        }
         player.update(playerPoint);
         player2.update(player2Point);
         bgManager.update();
@@ -77,39 +80,6 @@ public class GameplayScene implements Scene {
             powerUpSpeed = false;
         }
 
-        /*if (platformManager.playerCollide(player3)) {
-            if (platformManager.poweredUp) {
-                System.out.println("POWERED UP");
-                if (platformManager.collidedpw.powerUpColorTest(Color.GREEN)){
-                    if (!powerUpSpeed){
-                        powerUpSpeed = true;
-                        platformManager.increaseSpeed();
-                    }
-                    if (powerUpSpeed){
-                        powerUpSpeedTimer = powerUpSpeedTimer + 100;
-                    }
-                }
-                platformManager.platforms.remove(platformManager.collidedpw);
-            } else if(platformManager.goalReached){
-                System.out.println("GOAL");
-                platformManager.speed = 0;
-                bgManager.bgspeed = 0;
-                jumpPower = 0;
-            } else {
-                System.out.println("COLLIDE");
-                playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
-                player2Point.y = playerPoint.y + 5;
-                player3Point.y = playerPoint.y;
-                if (action == MotionEvent.ACTION_UP) jump = false;
-                jumpPower = jumpPowerDefault;
-                if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
-            }
-        }
-        else if (platformManager.playerCollide(player2) != true && (!jump) && player.playerPosY() < 1030) {
-            System.out.println("FALL");
-            jump = true;
-            jumpPower = 0.0f;
-        }*/
         if (platformManager.playerCollide(player3) && platformManager.collided != null){
             if (platformManager.collided.platformId == 1){
                 System.out.println("COLLIDE");
@@ -137,9 +107,7 @@ public class GameplayScene implements Scene {
             }
             if (platformManager.collided.platformId == 4){
                 System.out.println("GOAL");
-                platformManager.speed = 0;
-                bgManager.bgspeed = 0;
-                jumpPower = 0;
+                pause(true);
                 goalReached = true;
             }
             else {
@@ -162,22 +130,80 @@ public class GameplayScene implements Scene {
         platformManager.draw(canvas);
         //player2.draw(canvas); // Pelaajia 2 ja 3 ei piirretä ollenkaan
         //player3.draw(canvas);
-        if(goalReached){
+
+        canvas.drawBitmap(pause, Constants.SCREEN_WIDTH - pause.getWidth() - 10, 10, null);
+
+        if(paused){
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
-            paint.setTextSize(300);
+            paint.setTextSize(60);
             paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText("GOAL!",Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2, paint);
-            Constants.LEVEL1_CLEARED = true;
-            terminate();
+
+            if(goalReached){
+                canvas.drawText("GOAL REACHED! - PRESS TO CONTINUE",Constants.SCREEN_WIDTH/2 + paint.getTextSize()/2, Constants.SCREEN_HEIGHT/2 + paint.getTextSize()/2, paint);
+                switch (Constants.CURR_LEVEL){
+                    case 1:
+                        Constants.LEVEL1_CLEARED = true;
+                        break;
+                    case 2:
+                        Constants.LEVEL2_CLEARED = true;
+                        break;
+                    case 3:
+                        Constants.LEVEL3_CLEARED = true;
+                        break;
+                    case 4:
+                        Constants.LEVEL4_CLEARED = true;
+                        break;
+                    case 5:
+                        Constants.LEVEL5_CLEARED = true;
+                        break;
+                }
+                //terminate();
+            } else {
+                canvas.drawText("- PRESS SCREEN TO CONTINUE -", Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2 + paint.getTextSize() / 2, paint);
+            }
+        }
+    }
+
+    public void pause(boolean pause){
+
+        paused = pause;
+
+        if(paused){
+            platformManager.paused = true;
+            bgManager.paused = true;
+            player.paused = true;
+            player2.paused = true;
+            player3.paused = true;
+        } else {
+            platformManager.paused = false;
+            bgManager.paused = false;
+            player.paused = false;
+            player2.paused = false;
+            player3.paused = false;
         }
     }
 
     public void receiveMethod(MotionEvent event){
+
+        int x = (int)event.getX();
+        int y = (int)event.getY();
+
         action = MotionEventCompat.getActionMasked(event);
         if (action == MotionEvent.ACTION_DOWN) {
-            if(!goalReached) {
-                jump = true;
+            if(paused){
+                if(goalReached){
+                    endScene();
+                } else {
+                    pause(false);
+                }
+            } else {
+                if (x >= (Constants.SCREEN_WIDTH - pause.getWidth() - 10) && x < (Constants.SCREEN_WIDTH - 10)
+                        && y >= 10 && y < (10 + pause.getHeight())) {
+                    pause(true);
+                } else {
+                    jump = true;
+                }
             }
         }
     }
@@ -202,8 +228,29 @@ public class GameplayScene implements Scene {
         }
     }
 
+    private Bitmap resize(Bitmap image, int maxWidth, int maxHeight){
+        if(maxHeight > 0 && maxWidth > 0){
+            int width = image.getWidth();
+            int height = image.getHeight();
+            float ratioBitmap = (float) width / (float) height;
+            float ratioMax = (float) maxWidth / (float) maxHeight;
+
+            int finalWidth = maxWidth;
+            int finalHeight = maxHeight;
+            if (ratioMax > 1){
+                finalWidth = (int) ((float)maxHeight * ratioBitmap);
+            } else {
+                finalHeight = (int) ((float)maxWidth / ratioBitmap);
+            }
+            image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true);
+            return image;
+        } else {
+            return image;
+        }
+    }
+
     @Override
-    public void terminate() {
+    public void endScene() {
         SceneManager.ACTIVE_SCENE = 0;
     }
 }

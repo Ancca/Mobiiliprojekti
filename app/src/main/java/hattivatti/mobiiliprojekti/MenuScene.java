@@ -109,19 +109,41 @@ public class MenuScene implements Scene {
         int y = (int)event.getY();
 
         if (action == MotionEvent.ACTION_DOWN) {
+                // Check which level to load
                 if(level1.contains(x,y)){
                     SceneManager.scenes.remove(1);
-                    SceneManager.scenes.add(new GameplayScene(mContext));
+                    SceneManager.scenes.add(new GameplayScene(mContext, 1));
                     SceneManager.ACTIVE_SCENE = 1;
-                }
-                if(level2.contains(x,y) || level3.contains(x,y) || level4.contains(x,y) || level5.contains(x,y)){
-                    Toast.makeText(mContext, "LEVEL NOT UNLOCKED!", Toast.LENGTH_SHORT).show();
+                } else if(level2.contains(x,y)){
+                    if(Constants.LEVEL1_CLEARED){
+                        SceneManager.scenes.remove(1);
+                        SceneManager.scenes.add(new GameplayScene(mContext, 2));
+                        SceneManager.ACTIVE_SCENE = 1;
+                    } else { Toast.makeText(mContext, "LEVEL NOT UNLOCKED!", Toast.LENGTH_SHORT).show(); }
+                } else if(level3.contains(x,y)){
+                    if(Constants.LEVEL2_CLEARED){
+                        SceneManager.scenes.remove(1);
+                        SceneManager.scenes.add(new GameplayScene(mContext, 3));
+                        SceneManager.ACTIVE_SCENE = 1;
+                    } else { Toast.makeText(mContext, "LEVEL NOT UNLOCKED!", Toast.LENGTH_SHORT).show(); }
+                } else if(level4.contains(x,y)){
+                    if(Constants.LEVEL3_CLEARED){
+                        SceneManager.scenes.remove(1);
+                        SceneManager.scenes.add(new GameplayScene(mContext, 4));
+                        SceneManager.ACTIVE_SCENE = 1;
+                    } else { Toast.makeText(mContext, "LEVEL NOT UNLOCKED!", Toast.LENGTH_SHORT).show(); }
+                } else if(level5.contains(x,y)){
+                    if(Constants.LEVEL4_CLEARED){
+                        SceneManager.scenes.remove(1);
+                        SceneManager.scenes.add(new GameplayScene(mContext, 5));
+                        SceneManager.ACTIVE_SCENE = 1;
+                    } else { Toast.makeText(mContext, "LEVEL NOT UNLOCKED!", Toast.LENGTH_SHORT).show(); }
                 }
         }
     }
 
     @Override
-    public void terminate() {
+    public void endScene() {
         SceneManager.ACTIVE_SCENE = 0;
     }
 }

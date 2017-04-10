@@ -22,7 +22,7 @@ public class SceneManager {
         ACTIVE_SCENE = 0;
         mContext = context;
         scenes.add(new MenuScene(context));
-        scenes.add(new GameplayScene(context));
+        scenes.add(new GameplayScene(context, 1));
     }
 
     public void receiveTouch(MotionEvent event){
