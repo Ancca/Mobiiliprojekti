@@ -16,6 +16,7 @@ public class SceneManager {
 
     public SceneManager(Context context){
         ACTIVE_SCENE = 0;
+        scenes.add(new MenuScene(context));
         scenes.add(new GameplayScene(context));
     }
 

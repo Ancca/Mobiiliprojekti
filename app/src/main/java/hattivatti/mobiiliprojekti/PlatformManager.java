@@ -43,9 +43,9 @@ public class PlatformManager {
         platformStorage.add(new Platform(850,200,50, Color.BLUE));
         platformStorage.add(new PowerUp(650,50,50, Color.GREEN));
         platformStorage.add(new Obstacle(450,200,50, Color.RED));
-        /*platformStorage.add(new Platform(850,200,50, Color.BLUE));
+        platformStorage.add(new Platform(850,200,50, Color.BLUE));
         platformStorage.add(new Obstacle(450,200,50, Color.RED));
-        platformStorage.add(new Platform(850,200,50, Color.BLUE));*/
+        platformStorage.add(new Platform(850,200,50, Color.BLUE));
         platformStorage.add(new Obstacle(450,200,50, Color.RED));
         platformStorage.add(new Goal(0,50,Constants.SCREEN_WIDTH, Color.GREEN));
 

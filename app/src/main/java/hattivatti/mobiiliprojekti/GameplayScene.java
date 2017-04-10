@@ -159,6 +159,6 @@ public class GameplayScene implements Scene {
 
     @Override
     public void terminate() {
-        SceneManager.ACTIVE_SCENE = 0;
+        SceneManager.ACTIVE_SCENE = 1;
     }
 }
