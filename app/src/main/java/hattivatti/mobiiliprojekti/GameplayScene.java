@@ -74,7 +74,9 @@ public class GameplayScene implements Scene {
         bgManager.update();
         player3.update(player3Point);
         platformManager.update();
-        if (powerUpSpeed) powerUpSpeedTimer--;
+        if(!paused) {
+            if (powerUpSpeed) powerUpSpeedTimer--;
+        }
         if (powerUpSpeedTimer <= 0){
             platformManager.decreaseSpeed();
             bgManager.decreaseBGSpeed();
@@ -136,41 +138,38 @@ public class GameplayScene implements Scene {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         if (powerUpSpeed) {
-            canvas.drawRect(1500, 50, 1500 + powerUpSpeedTimer * 2, 75, paint);
+            canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 50, Constants.SCREEN_WIDTH * 0.7f + powerUpSpeedTimer * 2, 75, paint);
         }
-        if (goalReached) {
-            paint.setTextSize(300);
 
-            canvas.drawBitmap(pause, Constants.SCREEN_WIDTH - pause.getWidth() - 10, 10, null);
+        canvas.drawBitmap(pause, Constants.SCREEN_WIDTH - pause.getWidth() - 10, 10, null);
 
-            if (paused) {
-                paint.setColor(Color.BLACK);
-                paint.setTextSize(60);
-                paint.setTextAlign(Paint.Align.CENTER);
+        if (paused) {
+            paint.setColor(Color.BLACK);
+            paint.setTextSize(60);
+            paint.setTextAlign(Paint.Align.CENTER);
 
-                if (goalReached) {
-                    canvas.drawText("GOAL REACHED! - PRESS TO CONTINUE", Constants.SCREEN_WIDTH / 2 + paint.getTextSize() / 2, Constants.SCREEN_HEIGHT / 2 + paint.getTextSize() / 2, paint);
-                    switch (Constants.CURR_LEVEL) {
-                        case 1:
-                            Constants.LEVEL1_CLEARED = true;
-                            break;
-                        case 2:
-                            Constants.LEVEL2_CLEARED = true;
-                            break;
-                        case 3:
-                            Constants.LEVEL3_CLEARED = true;
-                            break;
-                        case 4:
-                            Constants.LEVEL4_CLEARED = true;
-                            break;
-                        case 5:
-                            Constants.LEVEL5_CLEARED = true;
-                            break;
-                    }
-                    //terminate();
-                } else {
-                    canvas.drawText("- PRESS SCREEN TO CONTINUE -", Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2 + paint.getTextSize() / 2, paint);
+            if (goalReached) {
+                canvas.drawText("GOAL REACHED! - PRESS TO CONTINUE", Constants.SCREEN_WIDTH / 2 + paint.getTextSize() / 2, Constants.SCREEN_HEIGHT / 2 + paint.getTextSize() / 2, paint);
+                switch (Constants.CURR_LEVEL) {
+                    case 1:
+                        Constants.LEVEL1_CLEARED = true;
+                        break;
+                    case 2:
+                        Constants.LEVEL2_CLEARED = true;
+                        break;
+                    case 3:
+                        Constants.LEVEL3_CLEARED = true;
+                        break;
+                    case 4:
+                        Constants.LEVEL4_CLEARED = true;
+                        break;
+                    case 5:
+                        Constants.LEVEL5_CLEARED = true;
+                        break;
                 }
+                //terminate();
+            } else {
+                canvas.drawText("- PRESS SCREEN TO CONTINUE -", Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2 + paint.getTextSize() / 2, paint);
             }
         }
     }

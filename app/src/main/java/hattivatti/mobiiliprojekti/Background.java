@@ -20,6 +20,7 @@ public class Background {
     float x_layer2bg1 = 0;
     float x_layer2bg2 = Constants.SCREEN_WIDTH;
     boolean paused = false;
+    boolean speedStored = false;
     int storedSpeed = 0;
 
     public Background(Bitmap background, Bitmap background2){
@@ -31,12 +32,18 @@ public class Background {
     }
 
     public void update(){
-        
-        if(paused){
+
+        if (paused){
+            if(!speedStored) {
+                storedSpeed = bgspeed;
+                speedStored = true;
+            }
             bgspeed = 0;
-        } else {
-            bgspeed = storedSpeed;
-            storedSpeed = bgspeed;
+        } else if (!paused){
+            if(speedStored){
+                bgspeed = storedSpeed;
+                speedStored = false;
+            }
         }
 
         int elapsedTime = (int)(System.currentTimeMillis() - startTime);

@@ -28,6 +28,7 @@ public class PlatformManager {
     float speed;
     float storedSpeed;
     boolean paused = false;
+    boolean speedStored = false;
 
     public PlatformManager(int levelNumber){
         width = Constants.SCREEN_WIDTH;
@@ -53,11 +54,11 @@ public class PlatformManager {
 
         switch (levelNumber){
             case 1:
-                platformStorage.add(new Platform(700, 50, 50, Color.BLUE, 1));
-                /*platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
                 platformStorage.add(new Platform(650, 50, 50, Color.GREEN, 3));
+                platformStorage.add(new Platform(700, 50, 50, Color.BLUE, 1));
+                platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
                 platformStorage.add(new Platform(450, 200, 50, Color.RED, 2));
-                platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));*/
+                platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
                 platformStorage.add(new Platform(650, 200, 50, Color.RED, 2));
                 platformStorage.add(new Platform(0, 50, 1080, Color.GREEN, 4));
                 break;
@@ -96,10 +97,16 @@ public class PlatformManager {
     public void update(){
 
         if (paused){
+            if(!speedStored) {
+                storedSpeed = speed;
+                speedStored = true;
+            }
             speed = pauseSpeed;
         } else if (!paused){
-            speed = storedSpeed;
-            storedSpeed = speed;
+            if(speedStored){
+                speed = storedSpeed;
+                speedStored = false;
+            }
         }
 
         //debug speed
