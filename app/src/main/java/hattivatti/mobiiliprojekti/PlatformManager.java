@@ -47,6 +47,7 @@ public class PlatformManager {
 
     private void setupPlatforms(int levelNumber){
         //top, width, height
+<<<<<<< HEAD
         //1 = platform, 2 = obstacle, 3 = powerup, 4 = goal
 
         Constants.CURR_LEVEL = levelNumber;
@@ -80,6 +81,14 @@ public class PlatformManager {
                 platformStorage.add(new Platform(0, 50, 1080, Color.GREEN, 4));
                 break;
         }
+=======
+        platformStorage.add(new Platform(700,50,50, Color.BLUE, 1));
+        platformStorage.add(new Platform(850,200,50, Color.BLUE, 1));
+        platformStorage.add(new Platform(650,50,50, Color.GREEN, 3));
+        platformStorage.add(new Platform(450,200,50, Color.RED, 1));
+        platformStorage.add(new Platform(650,200,50, Color.RED, 1));
+        platformStorage.add(new Platform(0,50,1080, Color.GREEN, 4));
+>>>>>>> origin/master
 
     }
     public boolean playerCollide(Player player){

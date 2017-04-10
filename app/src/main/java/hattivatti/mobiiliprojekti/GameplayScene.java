@@ -111,7 +111,7 @@ public class GameplayScene implements Scene {
                 goalReached = true;
             }
             else {
-                System.out.println("ASD");
+                System.out.println("???");
             }
         }
         else if (platformManager.playerCollide(player2) != true && (!jump) && player.playerPosY() < 1030) {
@@ -124,7 +124,6 @@ public class GameplayScene implements Scene {
 
     @Override
     public void draw(Canvas canvas) {
-        //canvas.drawColor(Color.GRAY);
         bgManager.draw(canvas);
         player.draw(canvas);
         platformManager.draw(canvas);

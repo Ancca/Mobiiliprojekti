@@ -89,9 +89,4 @@ public class Platform implements GameObject {
         }
         return false;
     }
-
-    public int getId(){
-        int id = this.platformId;
-        return id;
-    }
 }
