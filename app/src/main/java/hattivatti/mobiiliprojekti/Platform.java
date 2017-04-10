@@ -30,13 +30,9 @@ public class Platform implements GameObject {
 
     }
 
-<<<<<<< HEAD
-    public Platform(int top, int platformWidth, int platformHeight, int color){
-        this.rectangle = new Rect(Constants.SCREEN_WIDTH + 50, top, (Constants.SCREEN_WIDTH + platformWidth + 50), (top + platformHeight));
-=======
+
     public Platform(int top, int platformWidth, int platformHeight, int color, int id){
         this.rectangle = new Rect(Constants.SCREEN_WIDTH, top, (Constants.SCREEN_WIDTH + platformWidth), (top + platformHeight));
->>>>>>> origin/master
         this.color = color;
         this.platformId = id;
     }
