@@ -31,10 +31,10 @@ public class MainActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //piilota yläpalkki
+        // Piilota yläpalkki
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        //peli koko näytölle
+        // Peli koko näytölle
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         final WindowManager w = (WindowManager) getBaseContext().getSystemService(getBaseContext().WINDOW_SERVICE);

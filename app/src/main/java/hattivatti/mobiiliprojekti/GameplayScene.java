@@ -77,39 +77,6 @@ public class GameplayScene implements Scene {
             powerUpSpeed = false;
         }
 
-        /*if (platformManager.playerCollide(player3)) {
-            if (platformManager.poweredUp) {
-                System.out.println("POWERED UP");
-                if (platformManager.collidedpw.powerUpColorTest(Color.GREEN)){
-                    if (!powerUpSpeed){
-                        powerUpSpeed = true;
-                        platformManager.increaseSpeed();
-                    }
-                    if (powerUpSpeed){
-                        powerUpSpeedTimer = powerUpSpeedTimer + 100;
-                    }
-                }
-                platformManager.platforms.remove(platformManager.collidedpw);
-            } else if(platformManager.goalReached){
-                System.out.println("GOAL");
-                platformManager.speed = 0;
-                bgManager.bgspeed = 0;
-                jumpPower = 0;
-            } else {
-                System.out.println("COLLIDE");
-                playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
-                player2Point.y = playerPoint.y + 5;
-                player3Point.y = playerPoint.y;
-                if (action == MotionEvent.ACTION_UP) jump = false;
-                jumpPower = jumpPowerDefault;
-                if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
-            }
-        }
-        else if (platformManager.playerCollide(player2) != true && (!jump) && player.playerPosY() < 1030) {
-            System.out.println("FALL");
-            jump = true;
-            jumpPower = 0.0f;
-        }*/
         if (platformManager.playerCollide(player3) && platformManager.collided != null){
             if (platformManager.collided.platformId == 1){
                 System.out.println("COLLIDE");
@@ -143,7 +110,7 @@ public class GameplayScene implements Scene {
                 goalReached = true;
             }
             else {
-                System.out.println("ASD");
+                System.out.println("???");
             }
         }
         else if (platformManager.playerCollide(player2) != true && (!jump) && player.playerPosY() < 1030) {
@@ -156,7 +123,6 @@ public class GameplayScene implements Scene {
 
     @Override
     public void draw(Canvas canvas) {
-        //canvas.drawColor(Color.GRAY);
         bgManager.draw(canvas);
         player.draw(canvas);
         platformManager.draw(canvas);
