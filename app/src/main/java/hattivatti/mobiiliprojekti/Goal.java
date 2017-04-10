@@ -6,7 +6,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 
 /**
- * Created by Valtteri on 1.4.2017.
+ * Created by Tursake on 5.4.2017.
  */
 
 public class Goal extends Platform {
@@ -25,7 +25,7 @@ public class Goal extends Platform {
     }
 
     public Goal(int top, int platformWidth, int platformHeight, int color){
-        this.rectangle = new Rect(Constants.SCREEN_WIDTH, top, (Constants.SCREEN_WIDTH + platformWidth), (top + platformHeight));
+        this.rectangle = new Rect(Constants.SCREEN_WIDTH + 50, top, (Constants.SCREEN_WIDTH + platformWidth + 50), (top + platformHeight));
         this.color = color;
     }
 

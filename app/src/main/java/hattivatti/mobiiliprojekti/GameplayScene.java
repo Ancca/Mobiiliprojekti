@@ -125,6 +125,8 @@ public class GameplayScene implements Scene {
             paint.setTextSize(300);
             paint.setTextAlign(Paint.Align.CENTER);
             canvas.drawText("GOAL!",Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2, paint);
+            Constants.LEVEL1_CLEARED = true;
+            terminate();
         }
     }
 
@@ -145,7 +147,7 @@ public class GameplayScene implements Scene {
         playerPoint.y = (int) player.playerPosY() - (int) jumpPower;
         player2Point.y = playerPoint.y + 5;
         player3Point.y = playerPoint.y - (int) jumpPower;
-        // Pidetään pelaaja ruudulla, kun se tippuu alas
+        // Pidetään pelaaja ruudulla, kun se tippuu maahan
         if (playerPoint.y > Constants.SCREEN_HEIGHT - (player.getPlayerHeight() / 2)) {
             jump = false;
             playerPoint.y = (int) (Constants.SCREEN_HEIGHT - (player.getPlayerHeight() / 2));
@@ -159,6 +161,6 @@ public class GameplayScene implements Scene {
 
     @Override
     public void terminate() {
-        SceneManager.ACTIVE_SCENE = 1;
+        SceneManager.ACTIVE_SCENE = 0;
     }
 }
