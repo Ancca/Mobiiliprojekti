@@ -19,15 +19,26 @@ public class Background {
     float x_layer1bg2 = Constants.SCREEN_WIDTH;
     float x_layer2bg1 = 0;
     float x_layer2bg2 = Constants.SCREEN_WIDTH;
+    boolean paused = false;
+    int storedSpeed = 0;
 
     public Background(Bitmap background, Bitmap background2){
         this.background = background;
         this.background2 = background2;
         startTime = System.currentTimeMillis();
+        storedSpeed = bgspeed;
 
     }
 
     public void update(){
+        
+        if(paused){
+            bgspeed = 0;
+        } else {
+            bgspeed = storedSpeed;
+            storedSpeed = bgspeed;
+        }
+
         int elapsedTime = (int)(System.currentTimeMillis() - startTime);
         startTime = System.currentTimeMillis();
         float speed = Constants.SCREEN_WIDTH/4000.0f;

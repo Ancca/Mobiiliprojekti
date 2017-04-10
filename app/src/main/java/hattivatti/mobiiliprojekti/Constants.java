@@ -13,8 +13,8 @@ public class Constants {
     public static boolean LEVEL3_CLEARED = false;
     public static boolean LEVEL4_CLEARED = false;
     public static boolean LEVEL5_CLEARED = false;
+    public static int CURR_LEVEL;
 
-    //DEBUG
     public static double FPS;
     public static float speed;
 }

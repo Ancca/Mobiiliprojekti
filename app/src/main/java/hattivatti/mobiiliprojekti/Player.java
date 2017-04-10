@@ -13,6 +13,7 @@ public class Player implements GameObject{
 
     public Rect rectangle;
     private int color;
+    public boolean paused = false;
 
     public Player(Rect rectangle, int color){
         this.rectangle = rectangle;
@@ -36,8 +37,10 @@ public class Player implements GameObject{
     }
 
     public void update(Point point){
-        rectangle.set(point.x - rectangle.width()/2, point.y - rectangle.height()/2,
-                point.x + rectangle.width()/2, point.y + rectangle.height()/2);
+        if(!paused) {
+            rectangle.set(point.x - rectangle.width() / 2, point.y - rectangle.height() / 2,
+                    point.x + rectangle.width() / 2, point.y + rectangle.height() / 2);
+        }
     }
 
     public double playerPosX(){
