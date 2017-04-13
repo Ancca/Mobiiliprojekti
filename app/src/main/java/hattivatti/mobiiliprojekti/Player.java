@@ -14,6 +14,7 @@ public class Player implements GameObject{
     public Rect rectangle;
     private int color;
     public boolean paused = false;
+    public boolean dead = false;
 
     public Player(Rect rectangle, int color){
         this.rectangle = rectangle;

@@ -105,31 +105,33 @@ public class GameplayScene implements Scene {
                 if (powerUpDouble) doubleJumpAvailable = true;
             }
             if (platformManager.collided.platformId == 2){
-
+                System.out.println("DEAD");
+                playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
+                player.update(playerPoint);
+                pause(true);
+                player.dead = true;
             }
-            if (platformManager.collided.platformId == 3){
+            if (platformManager.collided.platformId == 3) {
                 System.out.println("POWERED UP");
-                if (platformManager.collided.ColorTest(Color.GREEN)){
-                    if (!powerUpSpeed){
-                        powerUpSpeed = true;
-                        platformManager.increaseSpeed();
-                        bgManager.inceaseBGSpeed();
-                    }
-                    if (powerUpSpeed){
-                        powerUpSpeedTimer = powerUpSpeedTimer + 100;
-                    }
-                    platformManager.platforms.remove(platformManager.collided);
+                if (!powerUpSpeed) {
+                    powerUpSpeed = true;
+                    platformManager.increaseSpeed();
+                    bgManager.inceaseBGSpeed();
                 }
-                if (platformManager.collided.ColorTest(Color.BLACK)){
-                    if (!powerUpDouble){
-                        powerUpDouble = true;
-                        doubleJumpAvailable = true;
-                    }
-                    if (powerUpDouble){
-                        powerUpDoubleTimer = powerUpDoubleTimer + 100;
-                    }
-                    platformManager.platforms.remove(platformManager.collided);
+                if (powerUpSpeed) {
+                    powerUpSpeedTimer = powerUpSpeedTimer + 100;
                 }
+                platformManager.platforms.remove(platformManager.collided);
+            }
+            if (platformManager.collided.platformId == 5) {
+                if (!powerUpDouble){
+                    powerUpDouble = true;
+                    doubleJumpAvailable = true;
+                }
+                if (powerUpDouble){
+                    powerUpDoubleTimer = powerUpDoubleTimer + 100;
+                }
+                platformManager.platforms.remove(platformManager.collided);
             }
             if (platformManager.collided.platformId == 4){
                 System.out.println("GOAL");
@@ -169,6 +171,7 @@ public class GameplayScene implements Scene {
         canvas.drawBitmap(pause, Constants.SCREEN_WIDTH - pause.getWidth() - 10, 10, null);
 
         if (paused) {
+            paint.setColor(Color.BLACK);
             paint.setTextSize(60);
             paint.setTextAlign(Paint.Align.CENTER);
 
@@ -191,8 +194,11 @@ public class GameplayScene implements Scene {
                         Constants.LEVEL5_CLEARED = true;
                         break;
                 }
-                //terminate();
-            } else {
+            }
+            else if (player.dead) {
+                canvas.drawText("YOU DIED! - PRESS TO CONTINUE", Constants.SCREEN_WIDTH / 2 + paint.getTextSize() / 2, Constants.SCREEN_HEIGHT / 2 + paint.getTextSize() / 2, paint);
+            }
+            else {
                 canvas.drawText("- PRESS SCREEN TO CONTINUE -", Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2 + paint.getTextSize() / 2, paint);
             }
         }
@@ -227,7 +233,11 @@ public class GameplayScene implements Scene {
             if(paused){
                 if(goalReached){
                     endScene();
-                } else {
+                }
+                else if(player.dead){
+                    endScene();
+                }
+                else {
                     pause(false);
                 }
             } else {
@@ -254,6 +264,7 @@ public class GameplayScene implements Scene {
         if (jumpPower >= 0 && powerUpSpeed) jumpPower -= 5.0f;
         else if (jumpPower <= 0 && powerUpSpeed) jumpPower -= 7.5f;
         player3Point.y = playerPoint.y - (int) jumpPower;
+        player3Point.x = playerPoint.x - (int) platformManager.speed;
         // Pidetään pelaaja ruudulla, kun se tippuu maahan
         if (playerPoint.y > Constants.SCREEN_HEIGHT - (player.getPlayerHeight() / 2)) {
             jumpPower = jumpPowerDefault;

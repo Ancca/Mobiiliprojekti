@@ -48,14 +48,14 @@ public class PlatformManager {
 
     private void setupPlatforms(int levelNumber){
         //top, width, height
-        //1 = platform, 2 = obstacle, 3 = powerup, 4 = goal
+        //1 = platform, 2 = obstacle, 3 = powerup, 4 = goal, 5 = powerup2
 
         Constants.CURR_LEVEL = levelNumber;
 
         switch (levelNumber){
             case 1:
                 platformStorage.add(new Platform(650, 50, 50, Color.GREEN, 3));
-                platformStorage.add(new Platform(700, 50, 50, Color.BLACK, 3));
+                platformStorage.add(new Platform(700, 50, 50, Color.BLACK, 5));
                 platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
                 platformStorage.add(new Platform(450, 200, 50, Color.RED, 2));
                 platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
