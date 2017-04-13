@@ -1,5 +1,7 @@
 package hattivatti.mobiiliprojekti;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,6 +18,9 @@ public class Platform implements GameObject {
     private Rect rectangle;
     private int color;
     public int platformId;
+    int platformGap;
+    private Animation ground;
+    private AnimationManager animManager;
 
     public Rect getRectangle(){
         return rectangle;
@@ -31,27 +36,34 @@ public class Platform implements GameObject {
     }
 
 
-    public Platform(int top, int platformWidth, int platformHeight, int color, int id){
-        this.rectangle = new Rect(Constants.SCREEN_WIDTH, top, (Constants.SCREEN_WIDTH + platformWidth), (top + platformHeight));
+    public Platform(int top, int platformWidth, int platformHeight, int color, int id, int platformGap){
+        this.rectangle = new Rect(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - top, (Constants.SCREEN_WIDTH + platformWidth), ((Constants.SCREEN_HEIGHT - top) + platformHeight));
         this.color = color;
         this.platformId = id;
+        this.platformGap = platformGap;
+
+
+        BitmapFactory bf = new BitmapFactory();
+        Bitmap groundImg = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.grass);
+
+        ground = new Animation(new Bitmap[]{groundImg}, 2);
+
+        animManager = new AnimationManager(new Animation[]{ground});
     }
 
     @Override
     public void draw(Canvas canvas) {
-        Paint paint = new Paint();
+        /*Paint paint = new Paint();
         paint.setColor(color);
-        canvas.drawRect(rectangle, paint);
+        canvas.drawRect(rectangle, paint);*/
+        animManager.draw(canvas, rectangle);
     }
 
     @Override
     public void update() {
-
-    }
-
-    public void update(Point point){
-        rectangle.set(point.x - rectangle.width()/2, point.y - rectangle.height()/2,
-                point.x + rectangle.width()/2, point.y + rectangle.height()/2);
+        int state = 0;
+        animManager.playAnim(state);
+        animManager.update();
     }
 
     public int posX(){
