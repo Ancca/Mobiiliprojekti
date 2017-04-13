@@ -39,9 +39,8 @@ public class PlatformManager {
         pauseSpeed = 0;
         startTime = 0;
         storedSpeed = speed;
-        collided = null;
-        poweredUp = false;
-        goalReached = false;
+        collided = null; // Platform, johon pelaaja törmää
+        goalReached = false; // True kun pelaaja pääsee maaliin
 
         setupPlatforms(levelNumber);
     }

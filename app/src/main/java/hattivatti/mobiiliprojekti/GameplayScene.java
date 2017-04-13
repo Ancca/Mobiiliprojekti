@@ -30,7 +30,7 @@ public class GameplayScene implements Scene {
     int action; // Toiminta (Klikkaus)
     double jumpPowerDefault = 72.5f;
     double jumpPower = jumpPowerDefault; // Pelaajan alkunopeus hypättäessä
-    boolean paused = false;
+    boolean paused = false; // True kun peli on pausella
 
     Bitmap unscaledBackground, background, unscaledBackground2, background2, unscaledPause, pause;
 
