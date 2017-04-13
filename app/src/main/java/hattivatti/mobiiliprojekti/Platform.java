@@ -16,10 +16,14 @@ public class Platform implements GameObject {
 
     public boolean isPowerUp = false;
     private Rect rectangle;
-    private int color;
     public int platformId;
     int platformGap;
+    private Animation currAnim;
     private Animation ground;
+    private Animation powerup;
+    private Animation powerup2;
+    private Animation goal;
+    private Animation obstacle;
     private AnimationManager animManager;
 
     public Rect getRectangle(){
@@ -36,19 +40,49 @@ public class Platform implements GameObject {
     }
 
 
-    public Platform(int top, int platformWidth, int platformHeight, int color, int id, int platformGap){
+    public Platform(int top, int platformWidth, int platformHeight, int id, int platformGap){
         this.rectangle = new Rect(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - top, (Constants.SCREEN_WIDTH + platformWidth), ((Constants.SCREEN_HEIGHT - top) + platformHeight));
-        this.color = color;
         this.platformId = id;
         this.platformGap = platformGap;
 
 
         BitmapFactory bf = new BitmapFactory();
         Bitmap groundImg = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.grass);
+        Bitmap powerupImg = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.powerup_speed);
+        Bitmap powerupImg2 = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.powerup_doublejump);
+        Bitmap goalImg = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.signexit);
+        Bitmap obstacleImg = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.spikes);
 
         ground = new Animation(new Bitmap[]{groundImg}, 2);
+        powerup = new Animation(new Bitmap[]{powerupImg}, 2);
+        powerup2 = new Animation(new Bitmap[]{powerupImg2}, 2);
+        goal = new Animation(new Bitmap[]{goalImg}, 2);
+        obstacle = new Animation(new Bitmap[]{obstacleImg}, 2);
 
-        animManager = new AnimationManager(new Animation[]{ground});
+        switch (platformId) {
+            case 1:
+                //platform
+                currAnim = ground;
+                break;
+            case 2:
+                //obstacle
+                currAnim = obstacle;
+                break;
+            case 3:
+                //speed powerup
+                currAnim = powerup;
+                break;
+            case 4:
+                //goal
+                currAnim = goal;
+                break;
+            case 5:
+                //jump powerup
+                currAnim = powerup2;
+                break;
+        }
+
+        animManager = new AnimationManager(new Animation[]{currAnim});
     }
 
     @Override
@@ -61,8 +95,7 @@ public class Platform implements GameObject {
 
     @Override
     public void update() {
-        int state = 0;
-        animManager.playAnim(state);
+        animManager.playAnim(0);
         animManager.update();
     }
 
@@ -93,12 +126,5 @@ public class Platform implements GameObject {
     public int getWidth(){
         int widthHalf = this.rectangle.width() / 2;
         return widthHalf;
-    }
-
-    public boolean ColorTest(int col){
-        if (this.color == col){
-            return true;
-        }
-        return false;
     }
 }

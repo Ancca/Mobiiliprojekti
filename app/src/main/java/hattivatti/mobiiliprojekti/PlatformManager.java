@@ -59,14 +59,14 @@ public class PlatformManager {
 
         switch (levelNumber){
             case 1:
-                platformStorage.add(new Platform(50, 1000, 50, Color.RED, 2, 0));
-                platformStorage.add(new Platform(300, 500, 50, Color.BLUE, 1, 400));
-                platformStorage.add(new Platform(700, 500, 50, Color.BLUE, 1, 500));
-                platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1, 500));
-                platformStorage.add(new Platform(450, 200, 50, Color.RED, 2, 500));
-                platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1, 500));
-                platformStorage.add(new Platform(650, 200, 50, Color.RED, 2, 500));
-                platformStorage.add(new Platform(Constants.SCREEN_HEIGHT, 50, Constants.SCREEN_HEIGHT, Color.GREEN, 4, 500));
+                platformStorage.add(new Platform(50, 1000, 50, 2, 0));
+                platformStorage.add(new Platform(300, 500, 50, 1, 400));
+                platformStorage.add(new Platform(700, 500, 50, 1, 500));
+                platformStorage.add(new Platform(850, 200, 50, 1, 500));
+                platformStorage.add(new Platform(450, 200, 50, 2, 500));
+                platformStorage.add(new Platform(850, 200, 50, 1, 500));
+                platformStorage.add(new Platform(650, 200, 50, 2, 500));
+                platformStorage.add(new Platform(Constants.SCREEN_HEIGHT, 50, Constants.SCREEN_HEIGHT, 4, 500));
                 break;
             /*case 2:
                 platformStorage.add(new Platform(650, 200, 50, Color.RED, 2));
