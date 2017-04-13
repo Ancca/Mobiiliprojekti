@@ -52,18 +52,23 @@ public class PlatformManager {
 
         Constants.CURR_LEVEL = levelNumber;
 
+        //int top, int width, int height
+        //bottom = 0 = screen bottom
+        //jump height 700px, width 200px
+        //1 = platform, 2 = obstacle, 3 = powerup, 4 = goal
+
         switch (levelNumber){
             case 1:
-                platformStorage.add(new Platform(650, 50, 50, Color.GREEN, 3));
-                platformStorage.add(new Platform(700, 50, 50, Color.BLACK, 5));
-                platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
-                platformStorage.add(new Platform(450, 200, 50, Color.RED, 2));
-                platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
-                platformStorage.add(new Platform(650, 200, 50, Color.RED, 2));
-                platformStorage.add(new Platform(0, 50, 1080, Color.GREEN, 4));
+                platformStorage.add(new Platform(50, 1000, 50, Color.RED, 2, 0));
+                platformStorage.add(new Platform(300, 500, 50, Color.BLUE, 1, 400));
+                platformStorage.add(new Platform(700, 500, 50, Color.BLUE, 1, 500));
+                platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1, 500));
+                platformStorage.add(new Platform(450, 200, 50, Color.RED, 2, 500));
+                platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1, 500));
+                platformStorage.add(new Platform(650, 200, 50, Color.RED, 2, 500));
+                platformStorage.add(new Platform(Constants.SCREEN_HEIGHT, 50, Constants.SCREEN_HEIGHT, Color.GREEN, 4, 500));
                 break;
-            case 2:
-                platformStorage.add(new Platform(650, 50, 50, Color.BLACK, 3));
+            /*case 2:
                 platformStorage.add(new Platform(650, 200, 50, Color.RED, 2));
                 platformStorage.add(new Platform(0, 50, 1080, Color.GREEN, 4));
                 break;
@@ -80,7 +85,7 @@ public class PlatformManager {
                 platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
                 platformStorage.add(new Platform(650, 50, 50, Color.GREEN, 3));
                 platformStorage.add(new Platform(0, 50, 1080, Color.GREEN, 4));
-                break;
+                break;*/
         }
 
     }
@@ -117,10 +122,11 @@ public class PlatformManager {
         startTime = System.currentTimeMillis();
 
         for(Platform plat : platforms){
+            plat.update();
             plat.incrementX(-speed * elapsedTime);
         }
         if(platforms.size() > 0) { // Add a platform when the earlier one has moved far enough
-            if (platforms.get(0).getRectangle().left <= (Constants.SCREEN_WIDTH * 0.8f)) {
+            if (platforms.get(0).getRectangle().left <= Constants.SCREEN_WIDTH - platforms.get(0).platformGap) {
                 if(platformStorage.size() > 0){
                     platforms.add(0, platformStorage.get(0));
                     platformStorage.remove(0);

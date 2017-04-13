@@ -1,5 +1,7 @@
 package hattivatti.mobiiliprojekti;
 
+import android.content.Context;
+
 /**
  * Created by Tursake on 3.4.2017.
  */
@@ -14,6 +16,7 @@ public class Constants {
     public static boolean LEVEL4_CLEARED = false;
     public static boolean LEVEL5_CLEARED = false;
     public static int CURR_LEVEL;
+    public static Context CONTEXT;
 
     public static double FPS;
     public static float speed;
