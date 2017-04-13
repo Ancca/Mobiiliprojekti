@@ -73,6 +73,7 @@ public class GameplayScene implements Scene {
             if (!paused) {
                 if (player.powerUpSpeed) player.powerUpSpeedTimer--;
                 if (player.powerUpDouble) player.powerUpDoubleTimer--;
+                if (player.powerUpInvicibility) player.powerUpInvicibilityTimer--;
             }
             if (player.powerUpSpeedTimer <= 0) {
                 platformManager.decreaseSpeed();
@@ -85,10 +86,14 @@ public class GameplayScene implements Scene {
                 player.powerUpDouble = false;
                 player.doubleJumpAvailable = false;
             }
+            if (player.powerUpInvicibilityTimer <= 0) {
+                player.powerUpDoubleTimer = 100;
+                player.powerUpInvicibility = false;
+            }
 
             if (platformManager.playerCollide(player3) && platformManager.collided != null) {
                 if (platformManager.collided.platformId == 1 && jumpPower < 0) {
-                    System.out.println("COLLIDE");
+                    System.out.println("COLLIDED");
                     playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
                     player2Point.y = playerPoint.y + 5;
                     player3Point.y = playerPoint.y;
@@ -97,12 +102,22 @@ public class GameplayScene implements Scene {
                     if (player.powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
                     if (player.powerUpDouble) player.doubleJumpAvailable = true;
                 }
-                if (platformManager.collided.platformId == 2) {
+                if (platformManager.collided.platformId == 2 && !player.powerUpInvicibility) {
                     System.out.println("DEAD");
                     playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
                     player.update(playerPoint);
                     pause(true);
                     player.dead = true;
+                }
+                else if (platformManager.collided.platformId == 2 && player.powerUpInvicibility && jumpPower < 0) {
+                    System.out.println("COLLIDED");
+                    playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
+                    player2Point.y = playerPoint.y + 5;
+                    player3Point.y = playerPoint.y;
+                    if (action == MotionEvent.ACTION_UP) player.playerJump = false;
+                    jumpPower = jumpPowerDefault;
+                    if (player.powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
+                    if (player.powerUpDouble) player.doubleJumpAvailable = true;
                 }
                 if (platformManager.collided.platformId == 3) {
                     System.out.println("SPEED UP");
@@ -129,12 +144,11 @@ public class GameplayScene implements Scene {
                 }
                 if (platformManager.collided.platformId == 6) {
                     System.out.println("INVICIBILITY");
-                    if (!player.powerUpDouble) {
-                        player.powerUpDouble = true;
-                        player.doubleJumpAvailable = true;
+                    if (!player.powerUpInvicibility) {
+                        player.powerUpInvicibility = true;
                     }
-                    if (player.powerUpDouble) {
-                        player.powerUpDoubleTimer = player.powerUpDoubleTimer + 100;
+                    if (player.powerUpInvicibility) {
+                        player.powerUpInvicibilityTimer = player.powerUpInvicibilityTimer + 100;
                     }
                     platformManager.platforms.remove(platformManager.collided);
                 }
@@ -168,6 +182,10 @@ public class GameplayScene implements Scene {
         if (player.powerUpDouble){
             paint.setColor(Color.BLACK);
             canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 100, Constants.SCREEN_WIDTH * 0.7f + player.powerUpDoubleTimer * 2, 125, paint);
+        }
+        if (player.powerUpInvicibility){
+            paint.setColor(Color.BLUE);
+            canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 150, Constants.SCREEN_WIDTH * 0.7f + player.powerUpInvicibilityTimer * 2, 125, paint);
         }
 
         canvas.drawBitmap(pause, Constants.SCREEN_WIDTH - pause.getWidth() - 10, 10, null);

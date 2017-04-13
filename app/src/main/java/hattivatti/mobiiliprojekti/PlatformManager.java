@@ -71,7 +71,12 @@ public class PlatformManager {
             case 2:
                 platformStorage.add(new Platform(300, 50, 50, 3, 500));
                 platformStorage.add(new Platform(300, 50, 50, 5, 500));
-                platformStorage.add(new Platform(Constants.SCREEN_HEIGHT, 50, Constants.SCREEN_HEIGHT, 4, 1000));
+                platformStorage.add(new Platform(300, 50, 50, 6, 500));
+                platformStorage.add(new Platform(450, 200, 50, 2, 200));
+                platformStorage.add(new Platform(450, 200, 50, 2, 200));
+                platformStorage.add(new Platform(450, 200, 50, 2, 200));
+                platformStorage.add(new Platform(450, 200, 50, 2, 1000));
+                platformStorage.add(new Platform(Constants.SCREEN_HEIGHT, 50, Constants.SCREEN_HEIGHT, 4, 100));
                 break;
             /*case 3:
                 platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));

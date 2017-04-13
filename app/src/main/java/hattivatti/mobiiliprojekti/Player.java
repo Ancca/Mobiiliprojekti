@@ -21,7 +21,8 @@ public class Player implements GameObject{
     public boolean powerUpSpeed = false;
     public boolean powerUpDouble = false;
     public boolean doubleJumpAvailable = false;
-    public int invicibility = 0;
+    public boolean powerUpInvicibility = false;
+    public int powerUpInvicibilityTimer = 0;
     public int powerUpSpeedTimer = 100;
     public int powerUpDoubleTimer = 100;
 

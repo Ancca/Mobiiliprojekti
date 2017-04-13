@@ -80,6 +80,10 @@ public class Platform implements GameObject {
                 //jump powerup
                 currAnim = powerup2;
                 break;
+            case 6:
+                //invicibility powerup
+                currAnim = powerup2;
+                break;
         }
 
         animManager = new AnimationManager(new Animation[]{currAnim});
