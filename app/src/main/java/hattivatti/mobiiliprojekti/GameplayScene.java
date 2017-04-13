@@ -49,11 +49,17 @@ public class GameplayScene implements Scene {
         player3 = new Player(new Rect(100, 100, 200, 200), Color.WHITE);
         player3Point = new Point(100, 880);
 
-        unscaledBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.background5);
-        background = Bitmap.createScaledBitmap(unscaledBackground, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
-
-        unscaledBackground2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundsky5);
-        background2 = Bitmap.createScaledBitmap(unscaledBackground2, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
+        if(levelNumber >= 4){
+            unscaledBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.background5);
+            background = Bitmap.createScaledBitmap(unscaledBackground, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
+            unscaledBackground2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundsky5);
+            background2 = Bitmap.createScaledBitmap(unscaledBackground2, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
+        } else {
+            unscaledBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
+            background = Bitmap.createScaledBitmap(unscaledBackground, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
+            unscaledBackground2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundsky);
+            background2 = Bitmap.createScaledBitmap(unscaledBackground2, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
+        }
 
         unscaledPause = BitmapFactory.decodeResource(context.getResources(), R.drawable.pause);
         pause = resize(unscaledPause, Constants.SCREEN_WIDTH/10, Constants.SCREEN_HEIGHT/10);

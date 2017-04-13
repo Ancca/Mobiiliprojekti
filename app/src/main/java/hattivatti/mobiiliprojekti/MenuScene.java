@@ -27,11 +27,12 @@ public class MenuScene implements Scene {
     Bitmap background;
     Bitmap unscaledBackground2;
     Bitmap background2;
-    Rect level1;
-    Rect level2;
-    Rect level3;
-    Rect level4;
-    Rect level5;
+
+    Rect level1, level2, level3, level4, level5;
+    Bitmap level1Img, level2Img, level3Img, level4Img, level5Img;
+    private Animation level1anim, level2anim, level3anim, level4anim, level5anim;
+
+    boolean set1 = false, set2 = false, set3 = false, set4 = false;
 
     public MenuScene(Context context){
 
@@ -45,6 +46,13 @@ public class MenuScene implements Scene {
 
         bgManager = new Background(background, background2);
 
+        BitmapFactory bf = new BitmapFactory();
+        level1Img = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.hud_1);
+        level2Img = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.hud_2locked);
+        level3Img = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.hud_3locked);
+        level4Img = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.hud_4locked);
+        level5Img = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.hud_5locked);
+
         int widthCenter = Constants.SCREEN_WIDTH/2;
         int heightCenter = Constants.SCREEN_HEIGHT/2;
 
@@ -54,51 +62,73 @@ public class MenuScene implements Scene {
         level4 = new Rect(widthCenter + 100, heightCenter - 50, widthCenter + 200, heightCenter + 50);
         level5 = new Rect(widthCenter + 250, heightCenter - 50, widthCenter + 350, heightCenter + 50);
 
+
+        level1anim = new Animation(new Bitmap[]{level1Img}, 2);
+        level2anim = new Animation(new Bitmap[]{level2Img}, 2);
+        level3anim = new Animation(new Bitmap[]{level3Img}, 2);
+        level4anim = new Animation(new Bitmap[]{level4Img}, 2);
+        level5anim = new Animation(new Bitmap[]{level5Img}, 2);
+
+        set1 = false;
+        set2 = false;
+        set3 = false;
+        set4 = false;
+
         action = 1;
     }
 
     @Override
     public void update() {
         bgManager.update();
+        level1anim.update();
+        level2anim.update();
+        level3anim.update();
+        level4anim.update();
+        level5anim.update();
     }
 
     @Override
     public void draw(Canvas canvas) {
-        //canvas.drawColor(Color.GRAY);
         bgManager.draw(canvas);
+
+        BitmapFactory bf = new BitmapFactory();
+
+        if(Constants.LEVEL1_CLEARED && !set1) {
+            level2Img = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.hud_2);level1anim = new Animation(new Bitmap[]{level1Img}, 2);
+            level2anim = new Animation(new Bitmap[]{level2Img}, 2);
+            set1 = true;
+        }
+        if(Constants.LEVEL2_CLEARED && !set2) {
+            level3Img = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.hud_3);
+            level3anim = new Animation(new Bitmap[]{level3Img}, 2);
+            set2 = true;
+        }
+        if(Constants.LEVEL3_CLEARED && !set3) {
+            level4Img = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.hud_4);
+            level4anim = new Animation(new Bitmap[]{level4Img}, 2);
+            set3 = true;
+        }
+        if(Constants.LEVEL4_CLEARED && !set4) {
+            level5Img = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.hud_5);
+            level5anim = new Animation(new Bitmap[]{level5Img}, 2);
+            set4 = true;
+        }
 
         Paint paint = new Paint();
         //draw level select
-        paint.setColor(Color.GREEN);
-        canvas.drawRect(level1, paint);
-        if(!Constants.LEVEL1_CLEARED){
-            paint.setColor(Color.GRAY);
-        }
-        canvas.drawRect(level2, paint);
-        if(!Constants.LEVEL2_CLEARED){
-            paint.setColor(Color.GRAY);
-        }
-        canvas.drawRect(level3, paint);
-        if(!Constants.LEVEL3_CLEARED){
-            paint.setColor(Color.GRAY);
-        }
-        canvas.drawRect(level4, paint);
-        if(!Constants.LEVEL4_CLEARED){
-            paint.setColor(Color.GRAY);
-        }
-        canvas.drawRect(level5, paint);
-        if(!Constants.LEVEL5_CLEARED){
-            paint.setColor(Color.GRAY);
-        }
+        level1anim.play();
+        level1anim.draw(canvas, level1);
+        level2anim.play();
+        level2anim.draw(canvas, level2);
+        level3anim.play();
+        level3anim.draw(canvas, level3);
+        level4anim.play();
+        level4anim.draw(canvas, level4);
+        level5anim.play();
+        level5anim.draw(canvas, level5);
 
         paint.setColor(Color.BLACK);
-        paint.setTextSize(60);
         paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("1", level1.centerX(), level1.centerY(), paint);
-        canvas.drawText("2", level2.centerX(), level2.centerY(), paint);
-        canvas.drawText("3", level3.centerX(), level3.centerY(), paint);
-        canvas.drawText("4", level4.centerX(), level4.centerY(), paint);
-        canvas.drawText("5", level5.centerX(), level5.centerY(), paint);
         paint.setTextSize(300);
         canvas.drawText("PELI",Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2 - 250, paint);
     }

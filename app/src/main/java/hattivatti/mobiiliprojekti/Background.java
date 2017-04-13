@@ -14,7 +14,7 @@ public class Background {
     private long startTime;
     Bitmap background;
     Bitmap background2;
-    public int bgspeed = 5;
+    public int bgspeed = 4;
     float x_layer1bg1 = 0;
     float x_layer1bg2 = Constants.SCREEN_WIDTH;
     float x_layer2bg1 = 0;
@@ -45,10 +45,6 @@ public class Background {
                 speedStored = false;
             }
         }
-
-        int elapsedTime = (int)(System.currentTimeMillis() - startTime);
-        startTime = System.currentTimeMillis();
-        float speed = Constants.SCREEN_WIDTH/4000.0f;
 
         /*x += -speed * elapsedTime;
         x2 += -speed * elapsedTime;*/

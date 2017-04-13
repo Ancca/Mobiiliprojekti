@@ -22,9 +22,11 @@ public class Platform implements GameObject {
     private Animation ground;
     private Animation powerup;
     private Animation powerup2;
+    private Animation powerup3;
     private Animation goal;
     private Animation obstacle;
     private AnimationManager animManager;
+    private Rect goalRect;
 
     public Rect getRectangle(){
         return rectangle;
@@ -33,6 +35,10 @@ public class Platform implements GameObject {
     public void incrementX(float x){
         rectangle.left += x;
         rectangle.right += x;
+        if(platformId == 4){
+            goalRect.left += x;
+            goalRect.right += x;
+        }
     }
 
     public Platform(){
@@ -50,14 +56,18 @@ public class Platform implements GameObject {
         Bitmap groundImg = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.grass);
         Bitmap powerupImg = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.powerup_speed);
         Bitmap powerupImg2 = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.powerup_doublejump);
+        Bitmap powerupImg3 = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.powerup_invincibility);
         Bitmap goalImg = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.signexit);
-        Bitmap obstacleImg = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.spikes);
+        Bitmap obstacleImg = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.spikes2);
 
         ground = new Animation(new Bitmap[]{groundImg}, 2);
         powerup = new Animation(new Bitmap[]{powerupImg}, 2);
         powerup2 = new Animation(new Bitmap[]{powerupImg2}, 2);
+        powerup3 = new Animation(new Bitmap[]{powerupImg3}, 2);
         goal = new Animation(new Bitmap[]{goalImg}, 2);
         obstacle = new Animation(new Bitmap[]{obstacleImg}, 2);
+
+        goalRect = new Rect(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT - 100, Constants.SCREEN_WIDTH + 100, Constants.SCREEN_HEIGHT);
 
         switch (platformId) {
             case 1:
@@ -80,6 +90,9 @@ public class Platform implements GameObject {
                 //jump powerup
                 currAnim = powerup2;
                 break;
+            case 6:
+                //invincibility powerup
+                currAnim = powerup3;
         }
 
         animManager = new AnimationManager(new Animation[]{currAnim});
@@ -90,7 +103,11 @@ public class Platform implements GameObject {
         /*Paint paint = new Paint();
         paint.setColor(color);
         canvas.drawRect(rectangle, paint);*/
-        animManager.draw(canvas, rectangle);
+        if(platformId == 4){
+            animManager.draw(canvas, goalRect);
+        } else {
+            animManager.draw(canvas, rectangle);
+        }
     }
 
     @Override

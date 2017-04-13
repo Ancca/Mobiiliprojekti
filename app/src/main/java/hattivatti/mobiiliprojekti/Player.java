@@ -41,11 +41,14 @@ public class Player implements GameObject{
         Bitmap run9 = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.p1_walk09);
         Bitmap run10 = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.p1_walk10);
         Bitmap run11 = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.p1_walk11);
+        Bitmap deathImg = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.p1_hurt);
+        Bitmap deathImg2 = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.p1_hurt2);
 
         jump = new Animation(new Bitmap[]{jumpImg}, 2);
         run = new Animation(new Bitmap[]{run1,run2, run3, run4, run5, run6, run7, run8, run9, run10, run11}, 0.3f);
+        death = new Animation(new Bitmap[]{deathImg, deathImg2}, 0.2f);
 
-        animManager = new AnimationManager(new Animation[]{run, jump});
+        animManager = new AnimationManager(new Animation[]{run, jump, death});
     }
 
     public Rect getRectangle(){
@@ -66,6 +69,10 @@ public class Player implements GameObject{
     }
 
     public void update(Point point){
+        int state = 0;
+
+        if(dead) state = 2;
+
         if(!paused) {
             float oldTop = rectangle.top;
 
@@ -73,15 +80,17 @@ public class Player implements GameObject{
                     point.x + rectangle.width() / 2, point.y + rectangle.height() / 2);
 
             //state 0 = run right, state 1 = jumping/falling
-            int state = 0;
-            if(rectangle.top != oldTop){
+            if (rectangle.top != oldTop) {
                 state = 1;
             }
 
             animManager.playAnim(state);
             animManager.update();
-        }
 
+        } else if (state == 2){
+            animManager.playAnim(state);
+            animManager.update();
+        }
     }
 
     public double playerPosX(){

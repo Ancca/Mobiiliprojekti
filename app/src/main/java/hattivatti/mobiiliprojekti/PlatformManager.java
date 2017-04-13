@@ -47,19 +47,18 @@ public class PlatformManager {
     }
 
     private void setupPlatforms(int levelNumber){
-        //top, width, height
-        //1 = platform, 2 = obstacle, 3 = powerup, 4 = goal, 5 = powerup2
 
         Constants.CURR_LEVEL = levelNumber;
 
         //int top, int width, int height
         //bottom = 0 = screen bottom
         //jump height 700px, width 200px
-        //1 = platform, 2 = obstacle, 3 = powerup, 4 = goal
+        //1 = platform, 2 = obstacle, 3 = powerup, 4 = goal, 5 = powerup2
+        //obstacles should always be width 200, height 50
 
         switch (levelNumber){
             case 1:
-                platformStorage.add(new Platform(50, 1000, 50, 2, 0));
+                platformStorage.add(new Platform(50, 200, 50, 2, 0));
                 platformStorage.add(new Platform(300, 500, 50, 1, 400));
                 platformStorage.add(new Platform(700, 500, 50, 1, 500));
                 platformStorage.add(new Platform(850, 200, 50, 1, 500));
