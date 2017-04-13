@@ -28,15 +28,9 @@ public class GameplayScene implements Scene {
     public boolean goalReached = false;
 
     int action; // Toiminta (Klikkaus)
-    boolean jump = false; // True kun pelaaja hyppää
     double jumpPowerDefault = 72.5f;
     double jumpPower = jumpPowerDefault; // Pelaajan alkunopeus hypättäessä
-    int powerUpSpeedTimer = 100;
-    int powerUpDoubleTimer = 100;
-    boolean powerUpSpeed = false;
-    boolean powerUpDouble = false;
-    boolean doubleJumpAvailable = false;
-    boolean paused = false;
+    boolean paused = false; // True kun peli on pausella
 
     Bitmap unscaledBackground, background, unscaledBackground2, background2, unscaledPause, pause;
 
@@ -68,7 +62,7 @@ public class GameplayScene implements Scene {
         bgManager = new Background(background, background2);
 
         jumpPower = -1;
-        jump = true;
+        player.playerJump = true;
         action = 1;
 
     }
@@ -76,82 +70,104 @@ public class GameplayScene implements Scene {
     @Override
     public void update() {
         if(!paused) {
-            if (jump) playerMove();
-        }
-        player.update(playerPoint);
-        player2.update(player2Point);
-        player3.update(player3Point);
-        bgManager.update();
-        platformManager.update();
-        if(!paused) {
-            if (powerUpSpeed) powerUpSpeedTimer--;
-            if (powerUpDouble) powerUpDoubleTimer--;
-        }
-        if (powerUpSpeedTimer <= 0){
-            platformManager.decreaseSpeed();
-            bgManager.decreaseBGSpeed();
-            powerUpSpeedTimer = 100;
-            powerUpSpeed = false;
-        }
-        if (powerUpDoubleTimer <= 0){
-            powerUpDoubleTimer = 100;
-            powerUpDouble = false;
-            doubleJumpAvailable = false;
-        }
+            if (player.playerJump) playerMove();
+            player.update(playerPoint);
+            player2.update(player2Point);
+            player3.update(player3Point);
+            bgManager.update();
+            platformManager.update();
+            if (!paused) {
+                if (player.powerUpSpeed) player.powerUpSpeedTimer--;
+                if (player.powerUpDouble) player.powerUpDoubleTimer--;
+                if (player.powerUpInvicibility) player.powerUpInvicibilityTimer--;
+            }
+            if (player.powerUpSpeedTimer <= 0) {
+                platformManager.decreaseSpeed();
+                bgManager.decreaseBGSpeed();
+                player.powerUpSpeedTimer = 100;
+                player.powerUpSpeed = false;
+            }
+            if (player.powerUpDoubleTimer <= 0) {
+                player.powerUpDoubleTimer = 100;
+                player.powerUpDouble = false;
+                player.doubleJumpAvailable = false;
+            }
+            if (player.powerUpInvicibilityTimer <= 0) {
+                player.powerUpDoubleTimer = 100;
+                player.powerUpInvicibility = false;
+            }
 
-        if (platformManager.playerCollide(player3) && platformManager.collided != null){
-            if (platformManager.collided.platformId == 1 && jumpPower < 0){
-                System.out.println("COLLIDE");
-                playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
-                player2Point.y = playerPoint.y + 5;
-                player3Point.y = playerPoint.y;
-                if (action == MotionEvent.ACTION_UP) jump = false;
-                jumpPower = jumpPowerDefault;
-                if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
-                if (powerUpDouble) doubleJumpAvailable = true;
-            }
-            if (platformManager.collided.platformId == 2){
-                System.out.println("DEAD");
-                playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
-                player.update(playerPoint);
-                pause(true);
-                player.dead = true;
-            }
-            if (platformManager.collided.platformId == 3) {
-                System.out.println("POWERED UP");
-                if (!powerUpSpeed) {
-                    powerUpSpeed = true;
-                    platformManager.increaseSpeed();
-                    bgManager.inceaseBGSpeed();
+            if (platformManager.playerCollide(player3) && platformManager.collided != null) {
+                if (platformManager.collided.platformId == 1 && jumpPower < 0) {
+                    System.out.println("COLLIDED");
+                    playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
+                    player2Point.y = playerPoint.y + 5;
+                    player3Point.y = playerPoint.y;
+                    if (action == MotionEvent.ACTION_UP) player.playerJump = false;
+                    jumpPower = jumpPowerDefault;
+                    if (player.powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
+                    if (player.powerUpDouble) player.doubleJumpAvailable = true;
                 }
-                if (powerUpSpeed) {
-                    powerUpSpeedTimer = powerUpSpeedTimer + 100;
+                if (platformManager.collided.platformId == 2 && !player.powerUpInvicibility) {
+                    System.out.println("DEAD");
+                    playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
+                    player.update(playerPoint);
+                    pause(true);
+                    player.dead = true;
                 }
-                platformManager.platforms.remove(platformManager.collided);
-            }
-            if (platformManager.collided.platformId == 5) {
-                if (!powerUpDouble){
-                    powerUpDouble = true;
-                    doubleJumpAvailable = true;
+                else if (platformManager.collided.platformId == 2 && player.powerUpInvicibility && jumpPower < 0) {
+                    System.out.println("COLLIDED");
+                    playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
+                    player2Point.y = playerPoint.y + 5;
+                    player3Point.y = playerPoint.y;
+                    if (action == MotionEvent.ACTION_UP) player.playerJump = false;
+                    jumpPower = jumpPowerDefault;
+                    if (player.powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
+                    if (player.powerUpDouble) player.doubleJumpAvailable = true;
                 }
-                if (powerUpDouble){
-                    powerUpDoubleTimer = powerUpDoubleTimer + 100;
+                if (platformManager.collided.platformId == 3) {
+                    System.out.println("SPEED UP");
+                    if (!player.powerUpSpeed) {
+                        player.powerUpSpeed = true;
+                        platformManager.increaseSpeed();
+                        bgManager.inceaseBGSpeed();
+                    }
+                    if (player.powerUpSpeed) {
+                        player.powerUpSpeedTimer = player.powerUpSpeedTimer + 100;
+                    }
+                    platformManager.platforms.remove(platformManager.collided);
                 }
-                platformManager.platforms.remove(platformManager.collided);
+                if (platformManager.collided.platformId == 5) {
+                    System.out.println("DOUBLE JUMP");
+                    if (!player.powerUpDouble) {
+                        player.powerUpDouble = true;
+                        player.doubleJumpAvailable = true;
+                    }
+                    if (player.powerUpDouble) {
+                        player.powerUpDoubleTimer = player.powerUpDoubleTimer + 100;
+                    }
+                    platformManager.platforms.remove(platformManager.collided);
+                }
+                if (platformManager.collided.platformId == 6) {
+                    System.out.println("INVICIBILITY");
+                    if (!player.powerUpInvicibility) {
+                        player.powerUpInvicibility = true;
+                    }
+                    if (player.powerUpInvicibility) {
+                        player.powerUpInvicibilityTimer = player.powerUpInvicibilityTimer + 100;
+                    }
+                    platformManager.platforms.remove(platformManager.collided);
+                }
+                if (platformManager.collided.platformId == 4) {
+                    System.out.println("GOAL");
+                    pause(true);
+                    goalReached = true;
+                }
+            } else if (platformManager.playerCollide(player2) != true && (!player.playerJump) && player.playerPosY() < 1030) {
+                System.out.println("FALL");
+                player.playerJump = true;
+                jumpPower = 0.0f;
             }
-            if (platformManager.collided.platformId == 4){
-                System.out.println("GOAL");
-                pause(true);
-                goalReached = true;
-            }
-            else {
-                System.out.println("???");
-            }
-        }
-        else if (platformManager.playerCollide(player2) != true && (!jump) && player.playerPosY() < 1030) {
-            System.out.println("FALL");
-            jump = true;
-            jumpPower = 0.0f;
         }
     }
 
@@ -165,13 +181,17 @@ public class GameplayScene implements Scene {
         //player3.draw(canvas);
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
-        if (powerUpSpeed){
+        if (player.powerUpSpeed){
             paint.setColor(Color.GREEN);
-            canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 50, Constants.SCREEN_WIDTH * 0.7f + powerUpSpeedTimer * 2, 75, paint);
+            canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 50, Constants.SCREEN_WIDTH * 0.7f + player.powerUpSpeedTimer * 2, 75, paint);
         }
-        if (powerUpDouble){
+        if (player.powerUpDouble){
             paint.setColor(Color.BLACK);
-            canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 100, Constants.SCREEN_WIDTH * 0.7f + powerUpDoubleTimer * 2, 125, paint);
+            canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 100, Constants.SCREEN_WIDTH * 0.7f + player.powerUpDoubleTimer * 2, 125, paint);
+        }
+        if (player.powerUpInvicibility){
+            paint.setColor(Color.BLUE);
+            canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 150, Constants.SCREEN_WIDTH * 0.7f + player.powerUpInvicibilityTimer * 2, 125, paint);
         }
 
         canvas.drawBitmap(pause, Constants.SCREEN_WIDTH - pause.getWidth() - 10, 10, null);
@@ -251,12 +271,12 @@ public class GameplayScene implements Scene {
                         && y >= 10 && y < (10 + pause.getHeight())) {
                     pause(true);
                 } else {
-                    if (jump && doubleJumpAvailable){
-                        if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5;
+                    if (player.playerJump && player.doubleJumpAvailable){
+                        if (player.powerUpSpeed) jumpPower = jumpPowerDefault * 1.5;
                         else jumpPower = jumpPowerDefault;
-                        doubleJumpAvailable = false;
+                        player.doubleJumpAvailable = false;
                     }
-                    jump = true;
+                    player.playerJump = true;
                 }
             }
         }
@@ -267,8 +287,8 @@ public class GameplayScene implements Scene {
         player2Point.y = playerPoint.y + 5;
         if (jumpPower >= 0) jumpPower -= 5.0f;
         else if (jumpPower <= 0) jumpPower -= 7.5f;
-        if (jumpPower >= 0 && powerUpSpeed) jumpPower -= 5.0f;
-        else if (jumpPower <= 0 && powerUpSpeed) jumpPower -= 7.5f;
+        if (jumpPower >= 0 && player.powerUpSpeed) jumpPower -= 5.0f;
+        else if (jumpPower <= 0 && player.powerUpSpeed) jumpPower -= 7.5f;
         player3Point.y = playerPoint.y - (int) jumpPower;
         player3Point.x = playerPoint.x - (int) platformManager.speed;
         // Pidetään pelaaja ruudulla, kun se tippuu maahan
@@ -277,10 +297,10 @@ public class GameplayScene implements Scene {
             playerPoint.y = (int) (Constants.SCREEN_HEIGHT - (player.getPlayerHeight() / 2));
             player2Point.y = playerPoint.y + 5;
             player3Point.y = playerPoint.y;
-            if (action == MotionEvent.ACTION_DOWN) jump = true;
-            else jump = false;
-            if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
-            if (powerUpDouble) doubleJumpAvailable = true;
+            if (action == MotionEvent.ACTION_DOWN) player.playerJump = true;
+            else player.playerJump = false;
+            if (player.powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
+            if (player.powerUpDouble) player.doubleJumpAvailable = true;
         }
     }
 

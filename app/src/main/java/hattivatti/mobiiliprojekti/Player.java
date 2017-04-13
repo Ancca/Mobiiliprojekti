@@ -16,7 +16,15 @@ public class Player implements GameObject{
     public Rect rectangle;
     private int color;
     public boolean paused = false;
-    public boolean dead = false;
+    public boolean dead = false; // True kun pelaaja kuolee
+    public boolean playerJump = false; // True kun pelaaja hyppää
+    public boolean powerUpSpeed = false; // True kun pelaajalla on speed powerup
+    public boolean powerUpDouble = false; // True kun pelaajalla on double(jump) powerup
+    public boolean doubleJumpAvailable = false; // True kun pelaaja voi hypätä toisen kerran (ilmassa)
+    public boolean powerUpInvicibility = false; // True kun pelaajalla on invicibility powerup
+    public int powerUpInvicibilityTimer = 0;
+    public int powerUpSpeedTimer = 100; // Powerup ajastimet
+    public int powerUpDoubleTimer = 100;
 
     private Animation run;
     private Animation jump;

@@ -39,9 +39,8 @@ public class PlatformManager {
         pauseSpeed = 0;
         startTime = 0;
         storedSpeed = speed;
-        collided = null;
-        poweredUp = false;
-        goalReached = false;
+        collided = null; // Platform, johon pelaaja törmää
+        goalReached = false; // True kun pelaaja pääsee maaliin
 
         setupPlatforms(levelNumber);
     }
@@ -53,7 +52,7 @@ public class PlatformManager {
         //int top, int width, int height
         //bottom = 0 = screen bottom
         //jump height 700px, width 200px
-        //1 = platform, 2 = obstacle, 3 = powerup, 4 = goal, 5 = powerup2
+        //1 = platform, 2 = obstacle, 3 = powerup, 4 = goal, 5 = powerup2, 6 = powerup3
         //obstacles should always be width 200, height 50
 
         switch (levelNumber){
@@ -67,11 +66,17 @@ public class PlatformManager {
                 platformStorage.add(new Platform(650, 200, 50, 2, 500));
                 platformStorage.add(new Platform(Constants.SCREEN_HEIGHT, 50, Constants.SCREEN_HEIGHT, 4, 500));
                 break;
-            /*case 2:
-                platformStorage.add(new Platform(650, 200, 50, Color.RED, 2));
-                platformStorage.add(new Platform(0, 50, 1080, Color.GREEN, 4));
+            case 2:
+                platformStorage.add(new Platform(300, 50, 50, 3, 500));
+                platformStorage.add(new Platform(300, 50, 50, 5, 500));
+                platformStorage.add(new Platform(300, 50, 50, 6, 500));
+                platformStorage.add(new Platform(450, 200, 50, 2, 200));
+                platformStorage.add(new Platform(450, 200, 50, 2, 200));
+                platformStorage.add(new Platform(450, 200, 50, 2, 200));
+                platformStorage.add(new Platform(450, 200, 50, 2, 1000));
+                platformStorage.add(new Platform(Constants.SCREEN_HEIGHT, 50, Constants.SCREEN_HEIGHT, 4, 100));
                 break;
-            case 3:
+            /*case 3:
                 platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
                 platformStorage.add(new Platform(0, 50, 1080, Color.GREEN, 4));
                 break;
