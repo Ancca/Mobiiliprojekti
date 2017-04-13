@@ -55,7 +55,7 @@ public class PlatformManager {
         switch (levelNumber){
             case 1:
                 platformStorage.add(new Platform(650, 50, 50, Color.GREEN, 3));
-                platformStorage.add(new Platform(700, 50, 50, Color.BLUE, 1));
+                platformStorage.add(new Platform(700, 50, 50, Color.BLACK, 3));
                 platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
                 platformStorage.add(new Platform(450, 200, 50, Color.RED, 2));
                 platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
@@ -63,6 +63,7 @@ public class PlatformManager {
                 platformStorage.add(new Platform(0, 50, 1080, Color.GREEN, 4));
                 break;
             case 2:
+                platformStorage.add(new Platform(650, 50, 50, Color.BLACK, 3));
                 platformStorage.add(new Platform(650, 200, 50, Color.RED, 2));
                 platformStorage.add(new Platform(0, 50, 1080, Color.GREEN, 4));
                 break;
