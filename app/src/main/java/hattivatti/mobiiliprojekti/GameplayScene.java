@@ -32,7 +32,10 @@ public class GameplayScene implements Scene {
     double jumpPowerDefault = 72.5f;
     double jumpPower = jumpPowerDefault; // Pelaajan alkunopeus hypättäessä
     int powerUpSpeedTimer = 100;
+    int powerUpDoubleTimer = 100;
     boolean powerUpSpeed = false;
+    boolean powerUpDouble = false;
+    boolean doubleJumpAvailable = false;
     boolean paused = false;
 
     Bitmap unscaledBackground, background, unscaledBackground2, background2, unscaledPause, pause;
@@ -71,11 +74,12 @@ public class GameplayScene implements Scene {
         }
         player.update(playerPoint);
         player2.update(player2Point);
-        bgManager.update();
         player3.update(player3Point);
+        bgManager.update();
         platformManager.update();
         if(!paused) {
             if (powerUpSpeed) powerUpSpeedTimer--;
+            if (powerUpDouble) powerUpDoubleTimer--;
         }
         if (powerUpSpeedTimer <= 0){
             platformManager.decreaseSpeed();
@@ -83,9 +87,14 @@ public class GameplayScene implements Scene {
             powerUpSpeedTimer = 100;
             powerUpSpeed = false;
         }
+        if (powerUpDoubleTimer <= 0){
+            powerUpDoubleTimer = 100;
+            powerUpDouble = false;
+            doubleJumpAvailable = false;
+        }
 
         if (platformManager.playerCollide(player3) && platformManager.collided != null){
-            if (platformManager.collided.platformId == 1){
+            if (platformManager.collided.platformId == 1 && jumpPower < 0){
                 System.out.println("COLLIDE");
                 playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
                 player2Point.y = playerPoint.y + 5;
@@ -93,6 +102,7 @@ public class GameplayScene implements Scene {
                 if (action == MotionEvent.ACTION_UP) jump = false;
                 jumpPower = jumpPowerDefault;
                 if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
+                if (powerUpDouble) doubleJumpAvailable = true;
             }
             if (platformManager.collided.platformId == 2){
 
@@ -107,6 +117,16 @@ public class GameplayScene implements Scene {
                     }
                     if (powerUpSpeed){
                         powerUpSpeedTimer = powerUpSpeedTimer + 100;
+                    }
+                    platformManager.platforms.remove(platformManager.collided);
+                }
+                if (platformManager.collided.ColorTest(Color.BLACK)){
+                    if (!powerUpDouble){
+                        powerUpDouble = true;
+                        doubleJumpAvailable = true;
+                    }
+                    if (powerUpDouble){
+                        powerUpDoubleTimer = powerUpDoubleTimer + 100;
                     }
                     platformManager.platforms.remove(platformManager.collided);
                 }
@@ -137,14 +157,18 @@ public class GameplayScene implements Scene {
         //player3.draw(canvas);
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
-        if (powerUpSpeed) {
+        if (powerUpSpeed){
+            paint.setColor(Color.GREEN);
             canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 50, Constants.SCREEN_WIDTH * 0.7f + powerUpSpeedTimer * 2, 75, paint);
+        }
+        if (powerUpDouble){
+            paint.setColor(Color.BLACK);
+            canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 100, Constants.SCREEN_WIDTH * 0.7f + powerUpDoubleTimer * 2, 125, paint);
         }
 
         canvas.drawBitmap(pause, Constants.SCREEN_WIDTH - pause.getWidth() - 10, 10, null);
 
         if (paused) {
-            paint.setColor(Color.BLACK);
             paint.setTextSize(60);
             paint.setTextAlign(Paint.Align.CENTER);
 
@@ -211,6 +235,11 @@ public class GameplayScene implements Scene {
                         && y >= 10 && y < (10 + pause.getHeight())) {
                     pause(true);
                 } else {
+                    if (jump && doubleJumpAvailable){
+                        if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5;
+                        else jumpPower = jumpPowerDefault;
+                        doubleJumpAvailable = false;
+                    }
                     jump = true;
                 }
             }
@@ -220,20 +249,21 @@ public class GameplayScene implements Scene {
     public void playerMove() {
         playerPoint.y = (int) player.playerPosY() - (int) jumpPower;
         player2Point.y = playerPoint.y + 5;
-        jumpPower -= 5.5f;
-        if (powerUpSpeed) jumpPower -= 5.5f;
-        if (jumpPower < 0) jumpPower -= 3.5f;
-        if (jumpPower < 0 && powerUpSpeed) jumpPower -= 3.5f;
+        if (jumpPower >= 0) jumpPower -= 5.0f;
+        else if (jumpPower <= 0) jumpPower -= 7.5f;
+        if (jumpPower >= 0 && powerUpSpeed) jumpPower -= 5.0f;
+        else if (jumpPower <= 0 && powerUpSpeed) jumpPower -= 7.5f;
         player3Point.y = playerPoint.y - (int) jumpPower;
         // Pidetään pelaaja ruudulla, kun se tippuu maahan
         if (playerPoint.y > Constants.SCREEN_HEIGHT - (player.getPlayerHeight() / 2)) {
-            jump = false;
             jumpPower = jumpPowerDefault;
             playerPoint.y = (int) (Constants.SCREEN_HEIGHT - (player.getPlayerHeight() / 2));
             player2Point.y = playerPoint.y + 5;
             player3Point.y = playerPoint.y;
             if (action == MotionEvent.ACTION_DOWN) jump = true;
+            else jump = false;
             if (powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
+            if (powerUpDouble) doubleJumpAvailable = true;
         }
     }
 
