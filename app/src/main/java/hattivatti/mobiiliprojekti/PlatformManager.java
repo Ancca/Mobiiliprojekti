@@ -55,7 +55,7 @@ public class PlatformManager {
         //int top, int width, int height
         //bottom = 0 = screen bottom
         //jump height 700px, width 200px
-        //1 = platform, 2 = obstacle, 3 = powerup, 4 = goal
+        //1 = platform, 2 = obstacle, 3 = powerup, 4 = goal, 5 = powerup2, 6 = powerup3
 
         switch (levelNumber){
             case 1:

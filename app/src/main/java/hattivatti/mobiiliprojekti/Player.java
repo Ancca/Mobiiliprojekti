@@ -17,6 +17,13 @@ public class Player implements GameObject{
     private int color;
     public boolean paused = false;
     public boolean dead = false;
+    public boolean playerJump = false; // True kun pelaaja hyppää
+    public boolean powerUpSpeed = false;
+    public boolean powerUpDouble = false;
+    public boolean doubleJumpAvailable = false;
+    public int invicibility = 0;
+    public int powerUpSpeedTimer = 100;
+    public int powerUpDoubleTimer = 100;
 
     private Animation run;
     private Animation jump;
