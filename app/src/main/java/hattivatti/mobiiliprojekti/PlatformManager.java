@@ -58,7 +58,8 @@ public class PlatformManager {
         switch (levelNumber){
             case 1:
                 platformStorage.add(new Platform(50, 200, 50, 2, 0));
-                platformStorage.add(new Platform(300, 500, 50, 1, 400));
+                platformStorage.add(new Platform(300, 500, 50, 1, 180));
+                platformStorage.add(new Platform(50, 200, 50, 2, 500));
                 platformStorage.add(new Platform(700, 500, 50, 1, 500));
                 platformStorage.add(new Platform(850, 200, 50, 1, 500));
                 platformStorage.add(new Platform(450, 200, 50, 2, 500));
@@ -73,23 +74,21 @@ public class PlatformManager {
                 platformStorage.add(new Platform(450, 200, 50, 2, 200));
                 platformStorage.add(new Platform(450, 200, 50, 2, 200));
                 platformStorage.add(new Platform(450, 200, 50, 2, 200));
-                platformStorage.add(new Platform(450, 200, 50, 2, 1000));
+                platformStorage.add(new Platform(450, 200, 50, 2, 3000));
                 platformStorage.add(new Platform(Constants.SCREEN_HEIGHT, 50, Constants.SCREEN_HEIGHT, 4, 100));
                 break;
-            /*case 3:
-                platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
-                platformStorage.add(new Platform(0, 50, 1080, Color.GREEN, 4));
+            case 3:
+                platformStorage.add(new Platform(250, 1000, 50, 1, 1000));
+                platformStorage.add(new Platform(Constants.SCREEN_HEIGHT, 50, Constants.SCREEN_HEIGHT, 4, 100));
                 break;
             case 4:
-                platformStorage.add(new Platform(650, 50, 50, Color.GREEN, 3));
-                platformStorage.add(new Platform(0, 50, 1080, Color.GREEN, 4));
+                platformStorage.add(new Platform(250, 1000, 50, 1, 1000));
+                platformStorage.add(new Platform(Constants.SCREEN_HEIGHT, 50, Constants.SCREEN_HEIGHT, 4, 100));
                 break;
             case 5:
-                platformStorage.add(new Platform(700, 50, 50, Color.BLUE, 1));
-                platformStorage.add(new Platform(850, 200, 50, Color.BLUE, 1));
-                platformStorage.add(new Platform(650, 50, 50, Color.GREEN, 3));
-                platformStorage.add(new Platform(0, 50, 1080, Color.GREEN, 4));
-                break;*/
+                platformStorage.add(new Platform(250, 1000, 50, 1, 1000));
+                platformStorage.add(new Platform(Constants.SCREEN_HEIGHT, 50, Constants.SCREEN_HEIGHT, 4, 100));
+                break;
         }
 
     }

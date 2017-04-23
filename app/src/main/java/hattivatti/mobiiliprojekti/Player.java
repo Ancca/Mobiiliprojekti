@@ -21,8 +21,8 @@ public class Player implements GameObject{
     public boolean powerUpSpeed = false; // True kun pelaajalla on speed powerup
     public boolean powerUpDouble = false; // True kun pelaajalla on double(jump) powerup
     public boolean doubleJumpAvailable = false; // True kun pelaaja voi hypätä toisen kerran (ilmassa)
-    public boolean powerUpInvicibility = false; // True kun pelaajalla on invicibility powerup
-    public int powerUpInvicibilityTimer = 0;
+    public boolean powerUpInvincibility = false; // True kun pelaajalla on invicibility powerup
+    public int powerUpInvincibilityTimer = 100;
     public int powerUpSpeedTimer = 100; // Powerup ajastimet
     public int powerUpDoubleTimer = 100;
 
