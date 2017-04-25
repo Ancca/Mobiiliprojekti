@@ -81,6 +81,8 @@ public class Player implements GameObject{
 
         if(dead) state = 2;
 
+        System.out.println("Current state: " + state);
+
         if(!paused) {
             float oldTop = rectangle.top;
 

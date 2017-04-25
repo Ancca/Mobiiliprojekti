@@ -69,7 +69,8 @@ public class GameplayScene implements Scene {
 
     @Override
     public void update() {
-        if(!paused) {
+            Constants.startCounter++;
+
             if (player.playerJump) playerMove();
             player.update(playerPoint);
             player2.update(player2Point);
@@ -117,9 +118,10 @@ public class GameplayScene implements Scene {
                 if (platformManager.collided.platformId == 2 && !player.powerUpInvincibility && playerPoint.y < platformManager.collided.posY()) {
                     System.out.println("DEAD");
                     playerPoint.y = platformManager.collided.posY() - platformManager.collided.getHeightHalf();
+                    player.dead = true;
+                    playerPoint.y = platformManager.collided.posY() - platformManager.collided.getHeightHalf() - 25;
                     player.update(playerPoint);
                     pause(true);
-                    player.dead = true;
                 }
                 else if (platformManager.collided.platformId == 2 && !player.powerUpInvincibility && playerPoint.y > platformManager.collided.posY()) {
                     System.out.println("NOT DEAD");
@@ -182,7 +184,6 @@ public class GameplayScene implements Scene {
                 player.playerJump = true;
                 jumpPower = 0.0f;
             }
-        }
     }
 
 
