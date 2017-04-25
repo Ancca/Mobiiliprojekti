@@ -82,7 +82,7 @@ public class GameplayScene implements Scene {
             if (player.powerUpInvincibility) player.powerUpInvincibilityTimer--;
             if (player.powerUpSpeedTimer <= 0) {
                 platformManager.decreaseSpeed();
-                bgManager.decreaseBGSpeed();
+                //bgManager.decreaseBGSpeed();
                 player.powerUpSpeedTimer = 100;
                 player.powerUpSpeed = false;
             }
@@ -146,7 +146,7 @@ public class GameplayScene implements Scene {
                     if (!player.powerUpSpeed) {
                         player.powerUpSpeed = true;
                         platformManager.increaseSpeed();
-                        bgManager.inceaseBGSpeed();
+                        //bgManager.inceaseBGSpeed();
                     }
                     if (player.powerUpSpeed) {
                         player.powerUpSpeedTimer = player.powerUpSpeedTimer + 100;
