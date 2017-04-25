@@ -50,11 +50,15 @@ public class PlatformManager {
 
         switch (levelNumber){
             case 1:
-                platformStorage.add(new Platform(50, 200, 50, 2, 0));
-                platformStorage.add(new Platform(300, 500, 50, 1, 180));
-                platformStorage.add(new Platform(50, 200, 50, 2, 500));
-                platformStorage.add(new Platform(700, 500, 50, 1, 500));
-                platformStorage.add(new Platform(850, 200, 50, 1, 500));
+                platformStorage.add(new Platform(25, 200, 50, 2, 0));
+                platformStorage.add(new Platform(300, 600, 50, 1, 180));
+                platformStorage.add(new Platform(25, 200, 50, 2, 200));
+                platformStorage.add(new Platform(25, 200, 50, 2, 500));
+                platformStorage.add(new Platform(300, 200, 50, 1, 0));
+                platformStorage.add(new Platform(25, 200, 50, 2, 150));
+                platformStorage.add(new Platform(550, 200, 50, 1, 50));
+                platformStorage.add(new Platform(25, 200, 50, 2, 200));
+                platformStorage.add(new Platform(300, 200, 50, 1, 0));
                 platformStorage.add(new Platform(450, 200, 50, 2, 500));
                 platformStorage.add(new Platform(850, 200, 50, 1, 500));
                 platformStorage.add(new Platform(650, 200, 50, 2, 500));
