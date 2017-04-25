@@ -1,14 +1,7 @@
 package hattivatti.mobiiliprojekti;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-
 import java.util.ArrayList;
-import java.util.IdentityHashMap;
 
 /**
  * Created by Tursake on 3.4.2017.
