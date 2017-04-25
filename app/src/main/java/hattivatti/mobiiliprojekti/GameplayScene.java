@@ -96,8 +96,8 @@ public class GameplayScene implements Scene {
             }
 
             if (platformManager.playerCollide(player3) && platformManager.collided != null) {
-                if (platformManager.collided.platformId == 1 && jumpPower < 0 && playerPoint.y < platformManager.collided.posY()) {
-                    System.out.println("COLLIDED");
+                if (platformManager.collided.platformId == 1 && playerPoint.y < platformManager.collided.posY()) {
+                    System.out.println("COLLIDED ABOVE");
                     playerPoint.y = (int) (platformManager.collided.posY() - platformManager.collided.getHeightHalf() - player.getPlayerHeight() / 2);
                     player2Point.y = playerPoint.y + 5;
                     player3Point.y = playerPoint.y;
@@ -106,12 +106,28 @@ public class GameplayScene implements Scene {
                     if (player.powerUpSpeed) jumpPower = jumpPowerDefault * 1.5f;
                     if (player.powerUpDouble) player.doubleJumpAvailable = true;
                 }
-                if (platformManager.collided.platformId == 2 && !player.powerUpInvincibility) {
+                else if (platformManager.collided.platformId == 1 && playerPoint.y > platformManager.collided.posY()) {
+                    System.out.println("COLLIDED BELOW");
+                    playerPoint.y = (int) (platformManager.collided.posY() + platformManager.collided.getHeightHalf() + player.getPlayerHeight()/2);
+                    player2Point.y = playerPoint.y + 5;
+                    player3Point.y = playerPoint.y + 5;
+                    jumpPower = -5;
+                    player.update(playerPoint);
+                }
+                if (platformManager.collided.platformId == 2 && !player.powerUpInvincibility && playerPoint.y < platformManager.collided.posY()) {
                     System.out.println("DEAD");
-                    playerPoint.y = platformManager.collided.posY() - platformManager.collided.getHeightHalf() - 25;
+                    playerPoint.y = platformManager.collided.posY() - platformManager.collided.getHeightHalf();
                     player.update(playerPoint);
                     pause(true);
                     player.dead = true;
+                }
+                else if (platformManager.collided.platformId == 2 && !player.powerUpInvincibility && playerPoint.y > platformManager.collided.posY()) {
+                    System.out.println("NOT DEAD");
+                    playerPoint.y = platformManager.collided.posY() + platformManager.collided.getHeightHalf() + (int) player.getPlayerHeight()/2;
+                    player2Point.y = playerPoint.y + 5;
+                    player3Point.y = playerPoint.y + 5;
+                    jumpPower = -5;
+                    player.update(playerPoint);
                 }
                 else if (platformManager.collided.platformId == 2 && player.powerUpInvincibility && jumpPower < 0) {
                     System.out.println("COLLIDED");
@@ -185,11 +201,11 @@ public class GameplayScene implements Scene {
             canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 50, Constants.SCREEN_WIDTH * 0.7f + player.powerUpSpeedTimer * 2, 75, paint);
         }
         if (player.powerUpDouble){
-            paint.setColor(Color.BLACK);
+            paint.setColor(Color.BLUE);
             canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 100, Constants.SCREEN_WIDTH * 0.7f + player.powerUpDoubleTimer * 2, 125, paint);
         }
         if (player.powerUpInvincibility){
-            paint.setColor(Color.BLUE);
+            paint.setColor(Color.RED);
             canvas.drawRect(Constants.SCREEN_WIDTH * 0.7f, 150, Constants.SCREEN_WIDTH * 0.7f + player.powerUpInvincibilityTimer * 2, 175, paint);
         }
 
