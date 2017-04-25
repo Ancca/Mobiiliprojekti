@@ -20,4 +20,5 @@ public class Constants {
 
     public static double FPS;
     public static float speed;
+    public static int startCounter = 0;
 }

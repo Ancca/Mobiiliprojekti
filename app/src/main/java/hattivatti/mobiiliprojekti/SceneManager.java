@@ -15,7 +15,6 @@ import java.util.ArrayList;
 public class SceneManager {
     public static ArrayList<Scene> scenes = new ArrayList<>();
     public static int ACTIVE_SCENE;
-    int startCounter = 0;
     Context mContext;
 
     public SceneManager(Context context){
@@ -30,7 +29,6 @@ public class SceneManager {
     }
 
     public void update(){
-        startCounter++;
         scenes.get(ACTIVE_SCENE).update();
     }
 
@@ -38,11 +36,11 @@ public class SceneManager {
         scenes.get(ACTIVE_SCENE).draw(canvas);
 
         //DEBUG
-        Paint paint = new Paint();
+        /*Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setTextSize(60);
         canvas.drawText("FPS " + Double.toString(Constants.FPS), 50, 50, paint);
-        canvas.drawText("Elapsed " + Integer.toString(startCounter), 50, 100, paint);
-        canvas.drawText("Speed " + Float.toString(Constants.speed), 50, 150, paint);
+        canvas.drawText("Elapsed " + Integer.toString(Constants.startCounter), 50, 100, paint);
+        canvas.drawText("Speed " + Float.toString(Constants.speed), 50, 150, paint);*/
     }
 }
