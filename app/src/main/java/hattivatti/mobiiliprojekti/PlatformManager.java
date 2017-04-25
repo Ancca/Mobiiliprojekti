@@ -56,12 +56,13 @@ public class PlatformManager {
                 platformStorage.add(new Platform(25, 200, 50, 2, 500));
                 platformStorage.add(new Platform(300, 200, 50, 1, 0));
                 platformStorage.add(new Platform(25, 200, 50, 2, 150));
-                platformStorage.add(new Platform(550, 200, 50, 1, 50));
-                platformStorage.add(new Platform(25, 200, 50, 2, 200));
-                platformStorage.add(new Platform(300, 200, 50, 1, 0));
-                platformStorage.add(new Platform(450, 200, 50, 2, 500));
-                platformStorage.add(new Platform(850, 200, 50, 1, 500));
-                platformStorage.add(new Platform(650, 200, 50, 2, 500));
+                platformStorage.add(new Platform(650, 400, 50, 1, 50));
+                platformStorage.add(new Platform(25, 200, 50, 2, 0));
+                platformStorage.add(new Platform(300, 200, 50, 2, 200));
+                platformStorage.add(new Platform(300, 200, 50, 2, 200));
+                platformStorage.add(new Platform(300, 200, 50, 2, 200));
+                platformStorage.add(new Platform(850, 200, 50, 1, 450));
+                platformStorage.add(new Platform(650, 200, 50, 2, 200));
                 platformStorage.add(new Platform(Constants.SCREEN_HEIGHT, 50, Constants.SCREEN_HEIGHT * 3, 4, 500));
                 break;
             case 2:
@@ -129,6 +130,9 @@ public class PlatformManager {
             if (platforms.get(0).getRectangle().left <= Constants.SCREEN_WIDTH - platforms.get(0).platformGap) {
                 if(platformStorage.size() > 0){
                     platforms.add(0, platformStorage.get(0));
+                    int xmove = 0;
+                    xmove = (Constants.SCREEN_WIDTH - platforms.get(1).posX()+platforms.get(1).getWidthHalf()) - platforms.get(1).platformGap;
+                    platforms.get(0).incrementX(-xmove);
                     platformStorage.remove(0);
                 }
             }
