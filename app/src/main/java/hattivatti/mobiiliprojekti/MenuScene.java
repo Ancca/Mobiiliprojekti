@@ -28,9 +28,9 @@ public class MenuScene implements Scene {
     Bitmap unscaledBackground2;
     Bitmap background2;
 
-    Rect level1, level2, level3, level4, level5;
-    Bitmap level1Img, level2Img, level3Img, level4Img, level5Img;
-    private Animation level1anim, level2anim, level3anim, level4anim, level5anim;
+    Rect level1, level2, level3, level4, level5, logo;
+    Bitmap level1Img, level2Img, level3Img, level4Img, level5Img, logoImg;
+    private Animation level1anim, level2anim, level3anim, level4anim, level5anim, logoAnim;
 
     boolean set1 = false, set2 = false, set3 = false, set4 = false;
 
@@ -52,15 +52,17 @@ public class MenuScene implements Scene {
         level3Img = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.hud_3locked);
         level4Img = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.hud_4locked);
         level5Img = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.hud_5locked);
+        logoImg = bf.decodeResource(Constants.CONTEXT.getResources(), R.drawable.logo);
 
         int widthCenter = Constants.SCREEN_WIDTH/2;
         int heightCenter = Constants.SCREEN_HEIGHT/2;
 
-        level1 = new Rect(widthCenter - 350, heightCenter - 50, widthCenter - 250, heightCenter + 50);
-        level2 = new Rect(widthCenter - 200, heightCenter - 50, widthCenter - 100, heightCenter + 50);
-        level3 = new Rect(widthCenter - 50 , heightCenter - 50, widthCenter + 50 , heightCenter + 50);
-        level4 = new Rect(widthCenter + 100, heightCenter - 50, widthCenter + 200, heightCenter + 50);
-        level5 = new Rect(widthCenter + 250, heightCenter - 50, widthCenter + 350, heightCenter + 50);
+        level1 = new Rect(widthCenter - 350, heightCenter + 50, widthCenter - 250, heightCenter + 150);
+        level2 = new Rect(widthCenter - 200, heightCenter + 50, widthCenter - 100, heightCenter + 150);
+        level3 = new Rect(widthCenter - 50 , heightCenter + 50, widthCenter + 50 , heightCenter + 150);
+        level4 = new Rect(widthCenter + 100, heightCenter + 50, widthCenter + 200, heightCenter + 150);
+        level5 = new Rect(widthCenter + 250, heightCenter + 50, widthCenter + 350, heightCenter + 150);
+        logo = new Rect(widthCenter - 662, heightCenter - 400, widthCenter + 662, heightCenter - (400-304));
 
 
         level1anim = new Animation(new Bitmap[]{level1Img}, 2);
@@ -68,6 +70,7 @@ public class MenuScene implements Scene {
         level3anim = new Animation(new Bitmap[]{level3Img}, 2);
         level4anim = new Animation(new Bitmap[]{level4Img}, 2);
         level5anim = new Animation(new Bitmap[]{level5Img}, 2);
+        logoAnim = new Animation(new Bitmap[]{logoImg}, 2);
 
         set1 = false;
         set2 = false;
@@ -126,11 +129,13 @@ public class MenuScene implements Scene {
         level4anim.draw(canvas, level4);
         level5anim.play();
         level5anim.draw(canvas, level5);
+        logoAnim.play();
+        logoAnim.draw(canvas, logo);
 
-        paint.setColor(Color.BLACK);
+        /*paint.setColor(Color.BLACK);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(300);
-        canvas.drawText("PELI",Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2 - 250, paint);
+        canvas.drawText("PELI",Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2 - 250, paint);*/
     }
 
     public void receiveMethod(MotionEvent event){
